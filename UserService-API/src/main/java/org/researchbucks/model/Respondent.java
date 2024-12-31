@@ -1,10 +1,11 @@
 package org.researchbucks.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import lombok.*;
+import org.researchbucks.util.CommonMessages;
+
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
@@ -13,10 +14,11 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "respondent")
-public class Respondent {
+public class Respondent implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     
@@ -26,13 +28,14 @@ public class Respondent {
     @Column(name = "last_name")
     private String lastName;
 
+    @Email(message = CommonMessages.INVALID_EMAIL)
     @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "mobile_number", nullable = false)
     private String mobile;
 
-    @Column(name = "nic", nullable = false)
+    @Column(name = "nic")
     private String nic;
 
     @Column(name = "address", nullable = false)
@@ -41,4 +44,6 @@ public class Respondent {
     @Column(name = "created_date")
     private Date createdDate;
 
+    @Column(name = "password", nullable = false)
+    private String password;
 }

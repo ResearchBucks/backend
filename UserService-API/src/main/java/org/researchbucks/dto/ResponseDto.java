@@ -12,13 +12,13 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseDto implements Serializable {
+public class ResponseDto<T> implements Serializable {
 
-    private HttpStatus status;
+    private String status;
     private String message;
-    private Object data;
+    private T data;
 
-    public ResponseDto(HttpStatus status, Object data){
+    public ResponseDto(String status, T data){
         this.status = status;
         this.data = data;
     }

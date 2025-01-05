@@ -7,6 +7,7 @@ import org.researchbucks.model.Respondent;
 import org.researchbucks.repository.UserRepository;
 import org.researchbucks.service.UserService;
 import org.researchbucks.util.CommonMessages;
+import org.researchbucks.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
                     .nic(userRegDto.getNic())
                     .address(userRegDto.getAddress())
                     .createdDate(date)
-                    .password(userRegDto.getPassword())
+                    .password(SecurityUtil.hashPassword(userRegDto.getPassword()))
                     .build();
             userRepository.save(respondent);
             log.info(CommonMessages.RESPONDENT_SAVED_SUCCESSFULLY);

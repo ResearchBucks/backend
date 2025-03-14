@@ -9,4 +9,7 @@ public class CommonMessages {
     public static final String RESPONDENT_SAVED_SUCCESSFULLY = "Respondent registered Successfully";
     public static final String INVALID_EMAIL = "Invalid email";
     public static final String INVALID_NIC = "Invalid NIC";
+    public static final String INVALID_RESPONDENT = "Invalid Respondent ID";
+    public static final String RESPONDENT_UPDATED = "Respondent updated successfully";
+    public static final String RESPONDENT_DELETED = "Respondent deleted successfully";
 }

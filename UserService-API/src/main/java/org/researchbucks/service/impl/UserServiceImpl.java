@@ -1,6 +1,7 @@
 package org.researchbucks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.dto.RespondentUpdateDto;
 import org.researchbucks.dto.ResponseDto;
 import org.researchbucks.dto.UserRegDto;
 import org.researchbucks.model.Respondent;
@@ -48,6 +49,84 @@ public class UserServiceImpl implements UserService {
                     message(CommonMessages.RESPONDENT_SAVED_SUCCESSFULLY).
                     status(CommonMessages.RESPONSE_DTO_SUCCESS).
                     build();
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+            return  ResponseDto.builder()
+                    .message(e.getLocalizedMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto getAllRespondents() {
+        try {
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(userRepository.findAll())
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+            return  ResponseDto.builder()
+                    .message(e.getLocalizedMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto getRespondentById(Long id) {
+        try {
+            Respondent respondent = userRepository.findById(id).get();
+            if(respondent.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(userRepository.findById(id))
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+            return  ResponseDto.builder()
+                    .message(CommonMessages.INVALID_RESPONDENT)
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto updateRespondent(Long id, RespondentUpdateDto respondentUpdateDto) {
+        try {
+            Respondent respondent = userRepository.findById(id).get();
+            if(respondentUpdateDto.getMobile() != null) respondent.setMobile(respondentUpdateDto.getMobile());
+            if(respondentUpdateDto.getAddress() != null) respondent.setAddress(respondentUpdateDto.getAddress());
+            if(respondentUpdateDto.getPassword() != null) respondent.setPassword(SecurityUtil.hashPassword(respondentUpdateDto.getPassword()));
+            userRepository.save(respondent);
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESPONDENT_UPDATED)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(respondent)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getLocalizedMessage());
+            return  ResponseDto.builder()
+                    .message(e.getLocalizedMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto deleteRespondent(Long id) {
+        try {
+            Respondent respondent = userRepository.findById(id).get();
+            respondent.setIsDeleted(true);
+            userRepository.save(respondent);
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESPONDENT_DELETED)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(respondent)
+                    .build();
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());
             return  ResponseDto.builder()

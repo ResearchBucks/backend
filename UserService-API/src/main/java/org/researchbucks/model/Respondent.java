@@ -46,4 +46,14 @@ public class Respondent implements Serializable {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
+    @Column(name = "total_earnings")
+    private Integer totalEarnings;
+
+    @Column(name = "is_verified")
+    private Boolean isVerified;
+
 }

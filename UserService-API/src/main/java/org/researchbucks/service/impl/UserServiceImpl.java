@@ -9,6 +9,7 @@ import org.researchbucks.service.UserService;
 import org.researchbucks.util.CommonMessages;
 import org.researchbucks.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -16,6 +17,9 @@ import java.util.Date;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
+
+    @Value("${respondent.defaultEarning}")
+    private Integer defaultEarning;
 
     @Autowired
     private UserRepository userRepository;
@@ -33,8 +37,12 @@ public class UserServiceImpl implements UserService {
                     .address(userRegDto.getAddress())
                     .createdDate(date)
                     .password(SecurityUtil.hashPassword(userRegDto.getPassword()))
+                    .isVerified(false)
+                    .totalEarnings(defaultEarning)
+                    .isDeleted(false)
                     .build();
             userRepository.save(respondent);
+            //ToDo: send verification email
             log.info(CommonMessages.RESPONDENT_SAVED_SUCCESSFULLY);
             return ResponseDto.builder().
                     message(CommonMessages.RESPONDENT_SAVED_SUCCESSFULLY).

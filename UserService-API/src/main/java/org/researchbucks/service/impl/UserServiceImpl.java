@@ -98,6 +98,7 @@ public class UserServiceImpl implements UserService {
     public ResponseDto updateRespondent(Long id, RespondentUpdateDto respondentUpdateDto) {
         try {
             Respondent respondent = userRepository.findById(id).get();
+            if(respondent.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
             if(respondentUpdateDto.getMobile() != null) respondent.setMobile(respondentUpdateDto.getMobile());
             if(respondentUpdateDto.getAddress() != null) respondent.setAddress(respondentUpdateDto.getAddress());
             if(respondentUpdateDto.getPassword() != null) respondent.setPassword(SecurityUtil.hashPassword(respondentUpdateDto.getPassword()));
@@ -120,6 +121,7 @@ public class UserServiceImpl implements UserService {
     public ResponseDto deleteRespondent(Long id) {
         try {
             Respondent respondent = userRepository.findById(id).get();
+            if(respondent.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
             respondent.setIsDeleted(true);
             userRepository.save(respondent);
             return ResponseDto.builder()

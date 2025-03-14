@@ -36,3 +36,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/.idea/dataSources.xml
+/.idea/encodings.xml
+/src/main/java/org/researchbucks/Main.java
+/.idea/misc.xml
+/pom.xml
+/.idea/vcs.xml
+/.idea/.gitignore

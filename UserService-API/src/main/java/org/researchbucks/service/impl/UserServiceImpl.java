@@ -61,11 +61,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseDto getAllRespondents() {
         try {
-            return ResponseDto.builder()
+            log.info(CommonMessages.GET_ALL_RESPONDENTS);
+            ResponseDto responseDto = ResponseDto.builder()
                     .message(CommonMessages.RESPONSE_DTO_SUCCESS)
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                     .data(userRepository.findAll())
                     .build();
+            log.info(CommonMessages.GET_RESPONDENT_SUCCESS);
+            return responseDto;
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());
             return  ResponseDto.builder()
@@ -78,13 +81,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseDto getRespondentById(Long id) {
         try {
+            log.info(CommonMessages.GET_RESPONDENT);
             Respondent respondent = userRepository.findById(id).get();
             if(respondent.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
-            return ResponseDto.builder()
+            ResponseDto responseDto = ResponseDto.builder()
                     .message(CommonMessages.RESPONSE_DTO_SUCCESS)
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                     .data(userRepository.findById(id))
                     .build();
+            log.info(CommonMessages.GET_RESPONDENT_SUCCESS);
+            return responseDto;
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());
             return  ResponseDto.builder()
@@ -97,12 +103,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseDto updateRespondent(Long id, RespondentUpdateDto respondentUpdateDto) {
         try {
+            log.info(CommonMessages.GET_RESPONDENT);
             Respondent respondent = userRepository.findById(id).get();
             if(respondent.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
             if(respondentUpdateDto.getMobile() != null) respondent.setMobile(respondentUpdateDto.getMobile());
             if(respondentUpdateDto.getAddress() != null) respondent.setAddress(respondentUpdateDto.getAddress());
             if(respondentUpdateDto.getPassword() != null) respondent.setPassword(SecurityUtil.hashPassword(respondentUpdateDto.getPassword()));
             userRepository.save(respondent);
+            log.info(CommonMessages.RESPONDENT_UPDATED);
             return ResponseDto.builder()
                     .message(CommonMessages.RESPONDENT_UPDATED)
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)
@@ -120,10 +128,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseDto deleteRespondent(Long id) {
         try {
+            log.info(CommonMessages.GET_RESPONDENT);
             Respondent respondent = userRepository.findById(id).get();
             if(respondent.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
             respondent.setIsDeleted(true);
             userRepository.save(respondent);
+            log.info(CommonMessages.RESPONDENT_DELETED);
             return ResponseDto.builder()
                     .message(CommonMessages.RESPONDENT_DELETED)
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)

@@ -1,5 +1,6 @@
 package org.researchbucks.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -44,6 +45,7 @@ public class Respondent implements Serializable {
     @Column(name = "created_date")
     private Date createdDate;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 

@@ -1,6 +1,7 @@
 package org.researchbucks.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.dto.RespondentUpdateDto;
 import org.researchbucks.dto.ResponseDto;
 import org.researchbucks.dto.UserRegDto;
 import org.researchbucks.repository.UserRepository;
@@ -42,10 +43,38 @@ public class UserController {
                             .build()
             );
         } else {
-            return ResponseEntity.ok().body(
+            return ResponseEntity.created(null).body(
                     userService.registerRespondent(userRegDto)
             );
         }
+    }
+
+    @GetMapping("/getAllRespondents")
+    public ResponseEntity<ResponseDto> getAllRespondents(){
+        return ResponseEntity.ok().body(
+                userService.getAllRespondents()
+        );
+    }
+
+    @GetMapping("/getRespondent/{id}")
+    public ResponseEntity<ResponseDto> getRespondentById(@PathVariable Long id){
+        return ResponseEntity.ok().body(
+                userService.getRespondentById(id)
+        );
+    }
+
+    @PutMapping("/updateRespondent/{id}")
+    public ResponseEntity<ResponseDto> updateRespondent(@PathVariable Long id, @RequestBody RespondentUpdateDto respondentUpdateDto){
+        return ResponseEntity.ok().body(
+                userService.updateRespondent(id, respondentUpdateDto)
+        );
+    }
+
+    @DeleteMapping("/deleteRespondent/{id}")
+    public ResponseEntity<ResponseDto> deleteRespondent(@PathVariable Long id){
+        return ResponseEntity.ok().body(
+                userService.deleteRespondent(id)
+        );
     }
 
 }

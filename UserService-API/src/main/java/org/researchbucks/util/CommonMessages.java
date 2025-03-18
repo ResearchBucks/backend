@@ -15,4 +15,7 @@ public class CommonMessages {
     public static final String GET_ALL_RESPONDENTS = "Getting all respondents";
     public static final String GET_RESPONDENT = "Getting respondent data";
     public static final String GET_RESPONDENT_SUCCESS = "Respondent data retrieved successfully";
+    public static final String GET_USER_SURVEY = "Fetching surveys for the user";
+    public static final String STORE_SURVEY_DATA = "Storing survey answers";
+    public static final String CHECK_RESPONSE = "Checking the response is available";
 }

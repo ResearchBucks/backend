@@ -18,4 +18,6 @@ public class CommonMessages {
     public static final String GET_USER_SURVEY = "Fetching surveys for the user";
     public static final String STORE_SURVEY_DATA = "Storing survey answers";
     public static final String CHECK_RESPONSE = "Checking the response is available";
+    public static final String SURVEY_DELETED = "Survey is deleted";
+    public static final String SURVEY_RESPONSE_SUCCESS = "Survey response saved successfully";
 }

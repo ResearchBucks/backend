@@ -37,10 +37,11 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public ResponseDto storeSurveyAnswers(Long surveyId, Long userId, List<SurveyAnswersDto> surveyAnswersDto) {
-        //ToDo: store data in the document database
         try {
             Survey survey = surveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.SURVEY_DELETED);
+            Respondent respondent = userRepository.findById(userId).get();
+            survey.addRespondent(respondent);
             surveyDataRepository.save(SurveyData.builder()
                     .surveyId(surveyId)
                     .answers(surveyAnswersDto.stream().collect(Collectors.toMap(SurveyAnswersDto::getQuestionId, SurveyAnswersDto::getAnswer)))
@@ -62,7 +63,27 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public ResponseDto deleteResponse(Long surveyId, Long userId) {
-        //ToDo: delete a response from the document database
-        return null;
+        try{
+            SurveyAnswersDto surveyAnswersDto = surveyDataRepository.findBySurveyIdAndUserId(surveyId, userId);
+            if(surveyAnswersDto != null){
+                surveyDataRepository.deleteBySurveyIdAndUserId(surveyId, userId);
+                return ResponseDto.builder()
+                        .message(CommonMessages.RESPONSE_DELETED)
+                        .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                        .build();
+            } else {
+                return ResponseDto.builder()
+                        .message(CommonMessages.RESPONSE_NOT_FOUND)
+                        .status(CommonMessages.RESPONSE_DTO_FAILED)
+                        .build();
+            }
+        } catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+
     }
 }

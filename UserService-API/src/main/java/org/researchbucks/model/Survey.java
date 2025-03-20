@@ -19,7 +19,6 @@ public class Survey implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -34,5 +33,10 @@ public class Survey implements Serializable {
             joinColumns = @JoinColumn(name = "survey_id"),
             inverseJoinColumns = @JoinColumn(name = "respondents_id"))
     private List<Respondent> respondents = new ArrayList<>();
+
+    public void addRespondent(Respondent respondent) {
+        this.respondents.add(respondent);
+        respondent.getSurvey().add(this);
+    }
 
 }

@@ -20,4 +20,6 @@ public class CommonMessages {
     public static final String CHECK_RESPONSE = "Checking the response is available";
     public static final String SURVEY_DELETED = "Survey is deleted";
     public static final String SURVEY_RESPONSE_SUCCESS = "Survey response saved successfully";
+    public static final String RESPONSE_DELETED = "Response deleted successfully";
+    public static final String RESPONSE_NOT_FOUND = "Response not found";
 }

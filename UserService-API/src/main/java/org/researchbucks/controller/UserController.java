@@ -22,6 +22,10 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    /************************
+     Register a respondent
+     Return type: ResponseEntity
+     ************************/
     @PostMapping("/register")
     public ResponseEntity<ResponseDto> registerRespondent(@RequestBody UserRegDto userRegDto){
         if(userRepository.existsRespondentByEmail(userRegDto.getEmail()) || userRepository.existsRespondentByNic(userRegDto.getNic())){
@@ -49,6 +53,10 @@ public class UserController {
         }
     }
 
+    /************************
+     Retrieve all respondents
+     Return type: ResponseEntity
+     ************************/
     @GetMapping("/getAllRespondents")
     public ResponseEntity<ResponseDto> getAllRespondents(){
         return ResponseEntity.ok().body(
@@ -56,6 +64,10 @@ public class UserController {
         );
     }
 
+    /************************
+     Retrieve a specific respondent using ID
+     Return type: ResponseEntity
+     ************************/
     @GetMapping("/getRespondent/{id}")
     public ResponseEntity<ResponseDto> getRespondentById(@PathVariable Long id){
         return ResponseEntity.ok().body(
@@ -63,6 +75,10 @@ public class UserController {
         );
     }
 
+    /************************
+     Update respondent details
+     Return type: ResponseEntity
+     ************************/
     @PutMapping("/updateRespondent/{id}")
     public ResponseEntity<ResponseDto> updateRespondent(@PathVariable Long id, @RequestBody RespondentUpdateDto respondentUpdateDto){
         return ResponseEntity.ok().body(
@@ -70,6 +86,10 @@ public class UserController {
         );
     }
 
+    /************************
+     Delete a respondent
+     Return type: ResponseEntity
+     ************************/
     @DeleteMapping("/deleteRespondent/{id}")
     public ResponseEntity<ResponseDto> deleteRespondent(@PathVariable Long id){
         return ResponseEntity.ok().body(

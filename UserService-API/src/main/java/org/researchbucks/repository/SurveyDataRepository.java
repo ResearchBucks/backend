@@ -11,4 +11,6 @@ public interface SurveyDataRepository extends MongoRepository<SurveyData, Long> 
     SurveyAnswersDto findBySurveyIdAndUserId(Long surveyId, Long userId);
 
     void deleteBySurveyIdAndUserId(Long surveyId, Long userId);
+
+    boolean existsBySurveyIdAndUserId(Long surveyId, Long userId);
 }

@@ -6,7 +6,6 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -16,6 +15,7 @@ import java.util.Map;
 public class SurveyData {
 
     @Id
+    private String id;
     private Long surveyId;
     private Map<Integer, Object> answers;
     private Long userId;

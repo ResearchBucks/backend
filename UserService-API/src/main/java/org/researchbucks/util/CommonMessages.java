@@ -22,4 +22,5 @@ public class CommonMessages {
     public static final String SURVEY_RESPONSE_SUCCESS = "Survey response saved successfully";
     public static final String RESPONSE_DELETED = "Response deleted successfully";
     public static final String RESPONSE_NOT_FOUND = "Response not found";
+    public static final String SURVEY_ALREADY_ANSWERED = "Survey already answered";
 }

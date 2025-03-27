@@ -40,8 +40,10 @@ public class SurveyServiceImpl implements SurveyService {
         try {
             Survey survey = surveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.SURVEY_DELETED);
+            if(surveyDataRepository.existsBySurveyIdAndUserId(surveyId, userId)) throw new Exception(CommonMessages.SURVEY_ALREADY_ANSWERED);
             Respondent respondent = userRepository.findById(userId).get();
             survey.addRespondent(respondent);
+            surveyRepository.save(survey);
             surveyDataRepository.save(SurveyData.builder()
                     .surveyId(surveyId)
                     .answers(surveyAnswersDto.stream().collect(Collectors.toMap(SurveyAnswersDto::getQuestionId, SurveyAnswersDto::getAnswer)))

@@ -1,10 +1,7 @@
 package org.researchbucks.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -28,6 +25,7 @@ public class Survey implements Serializable {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
+    @ToString.Exclude
     @ManyToMany
     @JoinTable(name = "survey_respondents",
             joinColumns = @JoinColumn(name = "survey_id"),

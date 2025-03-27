@@ -58,6 +58,7 @@ public class Respondent implements Serializable {
     @Column(name = "is_verified")
     private Boolean isVerified;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "respondents")
     private List<Survey> survey = new ArrayList<>();
 

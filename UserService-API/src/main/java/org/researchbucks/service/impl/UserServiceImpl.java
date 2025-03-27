@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
                     .nic(userRegDto.getNic())
                     .address(userRegDto.getAddress())
                     .createdDate(date)
-                    .password(SecurityUtil.hashPassword(userRegDto.getPassword()))
                     .isVerified(false)
                     .totalEarnings(defaultEarning)
                     .isDeleted(false)
@@ -50,9 +49,9 @@ public class UserServiceImpl implements UserService {
                     status(CommonMessages.RESPONSE_DTO_SUCCESS).
                     build();
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
+            log.error(e.getMessage());
             return  ResponseDto.builder()
-                    .message(e.getLocalizedMessage())
+                    .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
                     .build();
         }
@@ -70,7 +69,7 @@ public class UserServiceImpl implements UserService {
             log.info(CommonMessages.GET_RESPONDENT_SUCCESS);
             return responseDto;
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
+            log.error(e.getMessage());
             return  ResponseDto.builder()
                     .message(e.getLocalizedMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
@@ -92,7 +91,7 @@ public class UserServiceImpl implements UserService {
             log.info(CommonMessages.GET_RESPONDENT_SUCCESS);
             return responseDto;
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
+            log.error(e.getMessage());
             return  ResponseDto.builder()
                     .message(CommonMessages.INVALID_RESPONDENT)
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
@@ -117,9 +116,9 @@ public class UserServiceImpl implements UserService {
                     .data(respondent)
                     .build();
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
+            log.error(e.getMessage());
             return  ResponseDto.builder()
-                    .message(e.getLocalizedMessage())
+                    .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
                     .build();
         }
@@ -140,9 +139,33 @@ public class UserServiceImpl implements UserService {
                     .data(respondent)
                     .build();
         } catch (Exception e) {
-            log.error(e.getLocalizedMessage());
+            log.error(e.getMessage());
             return  ResponseDto.builder()
-                    .message(e.getLocalizedMessage())
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto verifyRespondent(UserRegDto userRegDto) {
+        try{
+            log.info(CommonMessages.GET_RESPONDENT);
+            Respondent respondent = userRepository.findByEmail(userRegDto.getEmail());
+            if(respondent.getIsDeleted() || respondent.getIsVerified()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
+            respondent.setPassword(SecurityUtil.hashPassword(userRegDto.getPassword()));
+            respondent.setIsVerified(true);
+            userRepository.save(respondent);
+            log.info(CommonMessages.VERIFIED);
+            return ResponseDto.builder()
+                    .message(CommonMessages.VERIFIED)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(respondent)
+                    .build();
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
                     .build();
         }

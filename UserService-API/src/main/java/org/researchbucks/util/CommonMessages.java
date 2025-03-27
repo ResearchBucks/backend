@@ -15,4 +15,5 @@ public class CommonMessages {
     public static final String GET_ALL_RESPONDENTS = "Getting all respondents";
     public static final String GET_RESPONDENT = "Getting respondent data";
     public static final String GET_RESPONDENT_SUCCESS = "Respondent data retrieved successfully";
+    public static final String VERIFIED = "Account verified";
 }

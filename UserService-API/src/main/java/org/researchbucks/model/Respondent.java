@@ -46,7 +46,7 @@ public class Respondent implements Serializable {
     private Date createdDate;
 
     @JsonIgnore
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "is_deleted")

@@ -7,7 +7,7 @@ import lombok.*;
 import org.researchbucks.util.CommonMessages;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 @Data
 @Builder
@@ -57,5 +57,9 @@ public class Respondent implements Serializable {
 
     @Column(name = "is_verified")
     private Boolean isVerified;
+
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "respondents")
+    private List<Survey> survey = new ArrayList<>();
 
 }

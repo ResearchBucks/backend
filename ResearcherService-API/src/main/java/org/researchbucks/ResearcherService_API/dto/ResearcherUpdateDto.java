@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResearcherUpdateDto {
+public class ResearcherUpdateDto implements Serializable {
 
     private String mobile;
     private String password;

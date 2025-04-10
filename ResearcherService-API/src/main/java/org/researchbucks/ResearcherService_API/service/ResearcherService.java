@@ -1,6 +1,7 @@
 package org.researchbucks.ResearcherService_API.service;
 
 import org.researchbucks.ResearcherService_API.dto.ResearcherRegDto;
+import org.researchbucks.ResearcherService_API.dto.ResearcherUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 
 public interface ResearcherService {
@@ -9,7 +10,11 @@ public interface ResearcherService {
 
     ResponseDto verifyResearcher(ResearcherRegDto researcherRegDto);
 
-    ResponseDto getAllRespondents();
+    ResponseDto getAllResearchers();
 
     ResponseDto getResearcherById(Long id);
+
+    ResponseDto updateResearcher(Long id, ResearcherUpdateDto researcherUpdateDto);
+
+    ResponseDto deleteResearcher(Long id);
 }

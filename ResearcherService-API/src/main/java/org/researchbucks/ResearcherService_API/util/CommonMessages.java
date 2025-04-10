@@ -12,4 +12,6 @@ public class CommonMessages {
     public static final String VERIFIED = "Account verified";
     public static final String GET_ALL_RESEARCHERS = "Getting all researchers";
     public static final String GET_RESEARCHER_SUCCESS = "Researcher data retrieved successfully";
+    public static final String RESEARCHER_UPDATED = "Researcher details updated";
+    public static final String RESEARCHER_DELETED = "Researcher account deleted successfully";
 }

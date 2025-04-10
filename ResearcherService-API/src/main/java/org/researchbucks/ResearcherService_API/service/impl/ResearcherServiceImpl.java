@@ -2,6 +2,7 @@ package org.researchbucks.ResearcherService_API.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.researchbucks.ResearcherService_API.dto.ResearcherRegDto;
+import org.researchbucks.ResearcherService_API.dto.ResearcherUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.model.Researcher;
 import org.researchbucks.ResearcherService_API.repository.ResearcherRepository;
@@ -27,6 +28,7 @@ public class ResearcherServiceImpl implements ResearcherService {
             Researcher researcher = Researcher.builder()
                     .firstName(researcherRegDto.getFirstName())
                     .lastName(researcherRegDto.getLastName())
+                    .occupation(researcherRegDto.getOccupation())
                     .email(researcherRegDto.getEmail())
                     .mobile(researcherRegDto.getMobile())
                     .nic(researcherRegDto.getNic())
@@ -76,7 +78,7 @@ public class ResearcherServiceImpl implements ResearcherService {
     }
 
     @Override
-    public ResponseDto getAllRespondents() {
+    public ResponseDto getAllResearchers() {
         try {
             log.info(CommonMessages.GET_ALL_RESEARCHERS);
             ResponseDto responseDto = ResponseDto.builder()
@@ -112,6 +114,55 @@ public class ResearcherServiceImpl implements ResearcherService {
             log.error(e.getMessage());
             return  ResponseDto.builder()
                     .message(CommonMessages.INVALID_RESEARCHER)
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto updateResearcher(Long id, ResearcherUpdateDto researcherUpdateDto) {
+        try {
+            log.info(CommonMessages.GET_RESEARCHER);
+            Researcher researcher = researcherRepository.findById(id).get();
+            if(researcher.getIsDeleted() || !researcher.getIsVerified()) throw new Exception(CommonMessages.INVALID_RESEARCHER);
+            if(researcherUpdateDto.getMobile() != null) researcher.setMobile(researcherUpdateDto.getMobile());
+            if(researcherUpdateDto.getAddress() != null) researcher.setAddress(researcherUpdateDto.getAddress());
+            if(researcherUpdateDto.getPassword() != null) researcher.setPassword(SecurityUtil.hashPassword(researcherUpdateDto.getPassword()));
+            if(researcherUpdateDto.getOccupation() != null) researcher.setOccupation(researcherUpdateDto.getOccupation());
+            researcherRepository.save(researcher);
+            log.info(CommonMessages.RESEARCHER_UPDATED);
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESEARCHER_UPDATED)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(researcher)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return  ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto deleteResearcher(Long id) {
+        try {
+            log.info(CommonMessages.GET_RESEARCHER);
+            Researcher researcher = researcherRepository.findById(id).get();
+            if(researcher.getIsDeleted() || !researcher.getIsVerified()) throw new Exception(CommonMessages.INVALID_RESEARCHER);
+            researcher.setIsDeleted(true);
+            researcherRepository.save(researcher);
+            log.info(CommonMessages.RESEARCHER_DELETED);
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESEARCHER_DELETED)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(researcher)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return  ResponseDto.builder()
+                    .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
                     .build();
         }

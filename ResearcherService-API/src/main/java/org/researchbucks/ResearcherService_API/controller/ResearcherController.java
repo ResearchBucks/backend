@@ -2,6 +2,7 @@ package org.researchbucks.ResearcherService_API.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.researchbucks.ResearcherService_API.dto.ResearcherRegDto;
+import org.researchbucks.ResearcherService_API.dto.ResearcherUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.repository.ResearcherRepository;
 import org.researchbucks.ResearcherService_API.service.ResearcherService;
@@ -60,7 +61,7 @@ public class ResearcherController {
     @GetMapping("/getAllResearchers")
     public ResponseEntity<ResponseDto> getAllResearchers(){
         return ResponseEntity.ok().body(
-                researcherService.getAllRespondents()
+                researcherService.getAllResearchers()
         );
     }
 
@@ -68,10 +69,32 @@ public class ResearcherController {
      Retrieve a specific researcher using ID
      Return type: ResponseEntity
      ************************/
-    @GetMapping("/getRespondent/{id}")
+    @GetMapping("/getResearcher/{id}")
     public ResponseEntity<ResponseDto> getRespondentById(@PathVariable Long id){
         return ResponseEntity.ok().body(
                 researcherService.getResearcherById(id)
+        );
+    }
+
+    /************************
+     Update researcher details
+     Return type: ResponseEntity
+     ************************/
+    @PutMapping("/updateResearcher/{id}")
+    public ResponseEntity<ResponseDto> updateRespondent(@PathVariable Long id, @RequestBody ResearcherUpdateDto researcherUpdateDto){
+        return ResponseEntity.ok().body(
+                researcherService.updateResearcher(id, researcherUpdateDto)
+        );
+    }
+
+    /************************
+     Delete a researcher
+     Return type: ResponseEntity
+     ************************/
+    @DeleteMapping("/deleteResearcher/{id}")
+    public ResponseEntity<ResponseDto> deleteResearcher(@PathVariable Long id){
+        return ResponseEntity.ok().body(
+                researcherService.deleteResearcher(id)
         );
     }
 }

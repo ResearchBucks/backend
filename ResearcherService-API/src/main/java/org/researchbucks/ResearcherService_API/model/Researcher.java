@@ -32,6 +32,9 @@ public class Researcher implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "occupation")
+    private String occupation;
+
     @Email(message = CommonMessages.INVALID_EMAIL)
     @Column(name = "email", nullable = false)
     private String email;

@@ -20,4 +20,10 @@ public class CommonMessages {
     public static final String GET_SURVEY_SUCCESS = "Successfully fetched survey details";
     public static final String GET_SURVEY_Q = "Getting survey questions";
     public static final String GET_SURVEY_Q_SUCCESS = "Survey questions fetched successfully";
+    public static final String UPDATE_SURVEY = "Updating survey details";
+    public static final String SURVEY_UPDATED = "Survey details successfully updated";
+    public static final String INVALID_SURVEY = "Invalid survey";
+    public static final String UPDATE_PAYMENT = "Updating survey payment status";
+    public static final String PAYMENT_UPDATED = "Payment status updated";
+    public static final String SURVEY_DELETE = "Survey deleted";
 }

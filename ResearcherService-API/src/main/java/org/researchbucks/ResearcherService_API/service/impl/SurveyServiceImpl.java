@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.dto.SurveyDto;
 import org.researchbucks.ResearcherService_API.dto.SurveyQuestionDto;
+import org.researchbucks.ResearcherService_API.model.PaymentStatus;
 import org.researchbucks.ResearcherService_API.model.Researcher;
 import org.researchbucks.ResearcherService_API.model.Survey;
 import org.researchbucks.ResearcherService_API.model.SurveyQuestion;
@@ -91,6 +92,8 @@ public class SurveyServiceImpl implements SurveyService {
     public ResponseDto getSurveyQuestions(Long surveyId) {
         try{
             log.info(CommonMessages.GET_SURVEY_Q);
+            Survey survey = surveyRepository.findById(surveyId).get();
+            if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
             ResponseDto responseDto = new ResponseDto<>().builder()
                     .message(CommonMessages.GET_SURVEY_Q_SUCCESS)
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)
@@ -98,6 +101,80 @@ public class SurveyServiceImpl implements SurveyService {
                     .build();
             log.info(CommonMessages.GET_SURVEY_Q_SUCCESS);
             return responseDto;
+        } catch (Exception e) {
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto updateSurveyDetails(Long surveyId, SurveyDto surveyDto) {
+        try{
+            log.info(CommonMessages.UPDATE_SURVEY);
+            Survey survey = surveyRepository.findById(surveyId).get();
+            if(survey.getIsDeleted() || !survey.getIsVerified()) throw new Exception(CommonMessages.INVALID_SURVEY);
+            if(surveyDto.getTitle() != null) survey.setTitle(surveyDto.getTitle());
+            if(surveyDto.getPaymentPerUser() != null) survey.setPaymentPerUser(surveyDto.getPaymentPerUser());
+            if(surveyDto.getExpiringDate() != null) survey.setExpiringDate(surveyDto.getExpiringDate());
+            survey.setLastEditedDate(new Date());
+            survey.setIsVerified(false);
+            surveyRepository.save(survey);
+            if(surveyDto.getSurveyQuestionList() != null){
+                SurveyQuestion surveyQuestion = surveyQuestionRepository.getBySurveyId(surveyId);
+                surveyQuestion.setQuestions(surveyDto.getSurveyQuestionList().stream().collect(Collectors.toMap(SurveyQuestionDto::getQuestionId, SurveyQuestionDto::getQuestion)));
+                surveyQuestionRepository.save(surveyQuestion);
+            }
+            log.info(CommonMessages.SURVEY_UPDATED);
+            return ResponseDto.builder()
+                    .message(CommonMessages.SURVEY_UPDATED)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .build();
+        } catch (Exception e) {
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto updatePaymentStatus(Long surveyId, PaymentStatus paymentStatus) {
+        try {
+            log.info(CommonMessages.UPDATE_PAYMENT);
+            Survey survey = surveyRepository.findById(surveyId).get();
+            if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
+            survey.setPaymentStatus(paymentStatus);
+            surveyRepository.save(survey);
+            log.info(CommonMessages.PAYMENT_UPDATED);
+            return ResponseDto.builder()
+                    .message(CommonMessages.PAYMENT_UPDATED)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .build();
+        } catch (Exception e) {
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto deleteSurvey(Long surveyId) {
+        try{
+            log.info(CommonMessages.GET_SURVEY);
+            Survey survey = surveyRepository.findById(surveyId).get();
+            if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
+            survey.setIsDeleted(true);
+            surveyRepository.save(survey);
+            surveyQuestionRepository.deleteBySurveyId(surveyId);
+            log.info(CommonMessages.SURVEY_DELETE);
+            return ResponseDto.builder()
+                    .message(CommonMessages.SURVEY_DELETE)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(survey)
+                    .build();
         } catch (Exception e) {
             return ResponseDto.builder()
                     .message(e.getMessage())

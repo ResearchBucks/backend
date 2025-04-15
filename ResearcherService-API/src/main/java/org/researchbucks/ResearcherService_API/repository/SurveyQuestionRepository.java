@@ -6,4 +6,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface SurveyQuestionRepository extends MongoRepository<SurveyQuestion, String> {
 
     Object getAllBySurveyId(Long surveyId);
+
+    SurveyQuestion getBySurveyId(Long surveyId);
+
+    void deleteBySurveyId(Long surveyId);
 }

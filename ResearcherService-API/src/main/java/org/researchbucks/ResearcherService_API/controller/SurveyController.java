@@ -1,0 +1,51 @@
+package org.researchbucks.ResearcherService_API.controller;
+
+import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.ResearcherService_API.dto.ResponseDto;
+import org.researchbucks.ResearcherService_API.dto.SurveyDto;
+import org.researchbucks.ResearcherService_API.service.SurveyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/survey")
+@Slf4j
+public class SurveyController {
+
+    @Autowired
+    private SurveyService surveyService;
+
+    /************************
+     Create a survey
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/create/{researcherId}")
+    public ResponseEntity<ResponseDto> createSurvey(@PathVariable Long researcherId, @RequestBody SurveyDto surveyDto){
+        return ResponseEntity.created(null).body(
+                surveyService.createSurvey(researcherId, surveyDto)
+        );
+    }
+
+    /************************
+     Get all surveys that researcher created
+     Return type: ResponseEntity
+     ************************/
+    @GetMapping("/getAllSurveys/{researcherId}")
+    public ResponseEntity<ResponseDto> getAllSurveys(@PathVariable Long researcherId){
+        return ResponseEntity.ok().body(
+                surveyService.getAllSurveys(researcherId)
+        );
+    }
+
+    /************************
+     Get survey questions that included in a specific survey
+     Return type: ResponseEntity
+     ************************/
+    @GetMapping("/getSurveyQuestions/{surveyId}")
+    public ResponseEntity<ResponseDto> getSurveyQuestions(@PathVariable Long surveyId){
+        return ResponseEntity.ok().body(
+                surveyService.getSurveyQuestions(surveyId)
+        );
+    }
+}

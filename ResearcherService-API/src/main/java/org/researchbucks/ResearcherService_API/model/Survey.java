@@ -2,9 +2,8 @@ package org.researchbucks.ResearcherService_API.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.researchbucks.ResearcherService_API.util.CommonMessages;
+import org.researchbucks.ResearcherService_API.enums.PaymentStatus;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -46,6 +45,18 @@ public class Survey implements Serializable {
 
     @Column(name = "payment_per_user", nullable = false)
     private Integer paymentPerUser;
+
+    @Column(name = "survey_price")
+    private Integer surveyPrice;
+
+    @Column(name = "payment_due")
+    private Date paymentDueDate;
+
+    @Column(name = "remaining_amount", nullable = false)
+    private Integer remainingAmountToPay;
+
+    @Column(name = "paid_date")
+    private Date paidDate;
 
     @JsonIgnore
     @ToString.Exclude

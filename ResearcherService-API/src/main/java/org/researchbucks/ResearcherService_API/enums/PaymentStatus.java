@@ -1,4 +1,4 @@
-package org.researchbucks.ResearcherService_API.model;
+package org.researchbucks.ResearcherService_API.enums;
 
 public enum PaymentStatus {
 
@@ -6,6 +6,5 @@ public enum PaymentStatus {
     COMPLETED,
     FAILED,
     REFUNDED,
-    PROCESSING,
-    CANCELLED
+    HALF_PAID
 }

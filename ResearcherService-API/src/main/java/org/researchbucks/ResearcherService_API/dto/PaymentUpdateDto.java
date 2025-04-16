@@ -6,17 +6,12 @@ import lombok.NoArgsConstructor;
 import org.researchbucks.ResearcherService_API.enums.PaymentStatus;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SurveyDto implements Serializable {
+public class PaymentUpdateDto implements Serializable {
 
-    private String title;
-    private Integer paymentPerUser;
-    private Date expiringDate;
+    private Integer paidAmount;
     private PaymentStatus paymentStatus;
-    private List<SurveyQuestionDto> surveyQuestionList;
 }

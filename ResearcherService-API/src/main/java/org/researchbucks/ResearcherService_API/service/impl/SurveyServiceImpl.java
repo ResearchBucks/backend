@@ -1,10 +1,11 @@
 package org.researchbucks.ResearcherService_API.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.ResearcherService_API.dto.PaymentUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.dto.SurveyDto;
 import org.researchbucks.ResearcherService_API.dto.SurveyQuestionDto;
-import org.researchbucks.ResearcherService_API.model.PaymentStatus;
+import org.researchbucks.ResearcherService_API.enums.PaymentStatus;
 import org.researchbucks.ResearcherService_API.model.Researcher;
 import org.researchbucks.ResearcherService_API.model.Survey;
 import org.researchbucks.ResearcherService_API.model.SurveyQuestion;
@@ -17,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +46,7 @@ public class SurveyServiceImpl implements SurveyService {
                     .isVerified(false)
                     .researcher(researcher)
                     .paymentPerUser(surveyDto.getPaymentPerUser())
+                    .surveyPrice(0)
                     .build();
             surveyRepository.save(survey);
             log.info(CommonMessages.SURVEY_SAVED);
@@ -140,12 +142,20 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public ResponseDto updatePaymentStatus(Long surveyId, PaymentStatus paymentStatus) {
+    public ResponseDto updatePaymentStatus(Long surveyId, PaymentUpdateDto paymentUpdateDto) {
         try {
             log.info(CommonMessages.UPDATE_PAYMENT);
             Survey survey = surveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
-            survey.setPaymentStatus(paymentStatus);
+            if( survey.getPaymentDueDate().before(new Date())) throw new Exception(CommonMessages.PAYMENT_OVERDUE);
+            if(Objects.equals(survey.getRemainingAmountToPay(), paymentUpdateDto.getPaidAmount())){
+                survey.setRemainingAmountToPay(0);
+                survey.setPaidDate(new Date());
+            } else if (survey.getRemainingAmountToPay()/2 == paymentUpdateDto.getPaidAmount()) {
+                survey.setRemainingAmountToPay(paymentUpdateDto.getPaidAmount());
+                survey.setPaidDate(new Date());
+            }
+            survey.setPaymentStatus(paymentUpdateDto.getPaymentStatus());
             surveyRepository.save(survey);
             log.info(CommonMessages.PAYMENT_UPDATED);
             return ResponseDto.builder()
@@ -181,5 +191,10 @@ public class SurveyServiceImpl implements SurveyService {
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
                     .build();
         }
+    }
+
+    @Override
+    public ResponseDto getSurveyResponses(Long surveyId) {
+        return null;
     }
 }

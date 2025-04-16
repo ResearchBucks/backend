@@ -1,9 +1,10 @@
 package org.researchbucks.ResearcherService_API.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.ResearcherService_API.dto.PaymentUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.dto.SurveyDto;
-import org.researchbucks.ResearcherService_API.model.PaymentStatus;
+import org.researchbucks.ResearcherService_API.enums.PaymentStatus;
 import org.researchbucks.ResearcherService_API.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -66,9 +67,9 @@ public class SurveyController {
      Return type: ResponseEntity
      ************************/
     @PutMapping("/updatePaymentStatus/{surveyId}")
-    public ResponseEntity<ResponseDto> updatePaymentStatus(@PathVariable Long surveyId, @RequestBody PaymentStatus paymentStatus){
+    public ResponseEntity<ResponseDto> updatePaymentStatus(@PathVariable Long surveyId, @RequestBody PaymentUpdateDto paymentUpdateDto){
         return ResponseEntity.ok().body(
-                surveyService.updatePaymentStatus(surveyId, paymentStatus)
+                surveyService.updatePaymentStatus(surveyId, paymentUpdateDto)
         );
     }
 
@@ -80,6 +81,13 @@ public class SurveyController {
     public ResponseEntity<ResponseDto> deleteSurvey(@PathVariable Long surveyId){
         return ResponseEntity.ok().body(
                 surveyService.deleteSurvey(surveyId)
+        );
+    }
+
+    @GetMapping("getSurveyResponses/{surveyId}")
+    public ResponseEntity<ResponseDto> getSurveyResponses(@PathVariable Long surveyId){
+        return ResponseEntity.ok().body(
+                surveyService.getSurveyResponses(surveyId)
         );
     }
 }

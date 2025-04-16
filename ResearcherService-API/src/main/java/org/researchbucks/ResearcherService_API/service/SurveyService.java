@@ -1,8 +1,8 @@
 package org.researchbucks.ResearcherService_API.service;
 
+import org.researchbucks.ResearcherService_API.dto.PaymentUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.dto.SurveyDto;
-import org.researchbucks.ResearcherService_API.model.PaymentStatus;
 
 public interface SurveyService {
 
@@ -14,7 +14,9 @@ public interface SurveyService {
 
     ResponseDto updateSurveyDetails(Long surveyId, SurveyDto surveyDto);
 
-    ResponseDto updatePaymentStatus(Long surveyId, PaymentStatus paymentStatus);
+    ResponseDto updatePaymentStatus(Long surveyId, PaymentUpdateDto paymentUpdateDto);
 
     ResponseDto deleteSurvey(Long surveyId);
+
+    ResponseDto getSurveyResponses(Long surveyId);
 }

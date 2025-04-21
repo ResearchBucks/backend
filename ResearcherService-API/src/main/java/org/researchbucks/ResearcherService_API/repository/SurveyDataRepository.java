@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SurveyDataRepository extends MongoRepository<SurveyData, String> {
+    Object getAllBySurveyId(Long surveyId);
 }

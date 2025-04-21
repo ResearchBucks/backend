@@ -10,6 +10,7 @@ import org.researchbucks.ResearcherService_API.model.Researcher;
 import org.researchbucks.ResearcherService_API.model.Survey;
 import org.researchbucks.ResearcherService_API.model.SurveyQuestion;
 import org.researchbucks.ResearcherService_API.repository.ResearcherRepository;
+import org.researchbucks.ResearcherService_API.repository.SurveyDataRepository;
 import org.researchbucks.ResearcherService_API.repository.SurveyQuestionRepository;
 import org.researchbucks.ResearcherService_API.repository.SurveyRepository;
 import org.researchbucks.ResearcherService_API.service.SurveyService;
@@ -31,6 +32,8 @@ public class SurveyServiceImpl implements SurveyService {
     private SurveyRepository surveyRepository;
     @Autowired
     private SurveyQuestionRepository surveyQuestionRepository;
+    @Autowired
+    private SurveyDataRepository surveyDataRepository;
 
     @Override
     public ResponseDto createSurvey(Long researcherId, SurveyDto surveyDto) {
@@ -46,8 +49,14 @@ public class SurveyServiceImpl implements SurveyService {
                     .isVerified(false)
                     .researcher(researcher)
                     .paymentPerUser(surveyDto.getPaymentPerUser())
-                    .surveyPrice(0)
+                    .surveyPrice(surveyDto.getSurveyPrice())
                     .build();
+            if(surveyDto.getPaymentStatus().equals(PaymentStatus.FAILED)){
+                survey.setRemainingAmountToPay(survey.getSurveyPrice());
+            }else {
+                survey.setRemainingAmountToPay(0);
+                survey.setPaidDate(new Date());
+            }
             surveyRepository.save(survey);
             log.info(CommonMessages.SURVEY_SAVED);
             surveyQuestionRepository.save(SurveyQuestion.builder()
@@ -148,11 +157,8 @@ public class SurveyServiceImpl implements SurveyService {
             Survey survey = surveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
             if( survey.getPaymentDueDate().before(new Date())) throw new Exception(CommonMessages.PAYMENT_OVERDUE);
-            if(Objects.equals(survey.getRemainingAmountToPay(), paymentUpdateDto.getPaidAmount())){
+            if(survey.getPaymentStatus().equals(PaymentStatus.FAILED) && paymentUpdateDto.getPaymentStatus().equals(PaymentStatus.COMPLETED)){
                 survey.setRemainingAmountToPay(0);
-                survey.setPaidDate(new Date());
-            } else if (survey.getRemainingAmountToPay()/2 == paymentUpdateDto.getPaidAmount()) {
-                survey.setRemainingAmountToPay(paymentUpdateDto.getPaidAmount());
                 survey.setPaidDate(new Date());
             }
             survey.setPaymentStatus(paymentUpdateDto.getPaymentStatus());
@@ -195,6 +201,23 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public ResponseDto getSurveyResponses(Long surveyId) {
-        return null;
+        try{
+            log.info(CommonMessages.GET_SURVEY_A);
+            Survey survey = surveyRepository.findById(surveyId).get();
+            if(survey.getIsDeleted() || !survey.getIsVerified()) throw new Exception(CommonMessages.INVALID_SURVEY);
+            ResponseDto responseDto = new ResponseDto<>().builder()
+                    .message(CommonMessages.GET_SURVEY_A_SUCCESS)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(surveyDataRepository.getAllBySurveyId(surveyId))
+                    .build();
+            log.info(CommonMessages.GET_SURVEY_A_SUCCESS);
+            return  responseDto;
+        } catch (Exception e) {
+            return  ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+
     }
 }

@@ -16,6 +16,7 @@ public class SurveyDto implements Serializable {
 
     private String title;
     private Integer paymentPerUser;
+    private Integer surveyPrice;
     private Date expiringDate;
     private PaymentStatus paymentStatus;
     private List<SurveyQuestionDto> surveyQuestionList;

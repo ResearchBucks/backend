@@ -27,4 +27,6 @@ public class CommonMessages {
     public static final String PAYMENT_UPDATED = "Payment status updated";
     public static final String SURVEY_DELETE = "Survey deleted";
     public static final String PAYMENT_OVERDUE = "Payment overdue";
+    public static final String GET_SURVEY_A = "Getting survey responses";
+    public static final String GET_SURVEY_A_SUCCESS = "Successfully retrieved survey responses";
 }

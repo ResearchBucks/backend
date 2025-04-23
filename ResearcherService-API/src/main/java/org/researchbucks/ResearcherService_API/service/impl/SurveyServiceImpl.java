@@ -164,7 +164,6 @@ public class SurveyServiceImpl implements SurveyService {
             log.info(CommonMessages.UPDATE_PAYMENT);
             Survey survey = surveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
-            if( survey.getPaymentDueDate().before(new Date())) throw new Exception(CommonMessages.PAYMENT_OVERDUE);
             if(survey.getPaymentStatus().equals(PaymentStatus.FAILED) && paymentUpdateDto.getPaymentStatus().equals(PaymentStatus.COMPLETED)){
                 survey.setRemainingAmountToPay(0);
                 survey.setPaidDate(new Date());

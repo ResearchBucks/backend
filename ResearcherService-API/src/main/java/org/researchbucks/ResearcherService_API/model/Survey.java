@@ -49,9 +49,6 @@ public class Survey implements Serializable {
     @Column(name = "survey_price")
     private Integer surveyPrice;
 
-    @Column(name = "payment_due")
-    private Date paymentDueDate;
-
     @Column(name = "remaining_amount", nullable = false)
     private Integer remainingAmountToPay;
 

@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.researchbucks.ResearcherService_API.dto.PaymentUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.dto.SurveyDto;
-import org.researchbucks.ResearcherService_API.enums.PaymentStatus;
 import org.researchbucks.ResearcherService_API.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

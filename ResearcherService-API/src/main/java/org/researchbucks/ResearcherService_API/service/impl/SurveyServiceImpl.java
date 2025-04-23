@@ -9,17 +9,14 @@ import org.researchbucks.ResearcherService_API.enums.PaymentStatus;
 import org.researchbucks.ResearcherService_API.model.Researcher;
 import org.researchbucks.ResearcherService_API.model.Survey;
 import org.researchbucks.ResearcherService_API.model.SurveyQuestion;
-import org.researchbucks.ResearcherService_API.repository.ResearcherRepository;
-import org.researchbucks.ResearcherService_API.repository.SurveyDataRepository;
-import org.researchbucks.ResearcherService_API.repository.SurveyQuestionRepository;
-import org.researchbucks.ResearcherService_API.repository.SurveyRepository;
+import org.researchbucks.ResearcherService_API.model.UserSurvey;
+import org.researchbucks.ResearcherService_API.repository.*;
 import org.researchbucks.ResearcherService_API.service.SurveyService;
 import org.researchbucks.ResearcherService_API.util.CommonMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +31,8 @@ public class SurveyServiceImpl implements SurveyService {
     private SurveyQuestionRepository surveyQuestionRepository;
     @Autowired
     private SurveyDataRepository surveyDataRepository;
+    @Autowired
+    private UserSurveyRepository userSurveyRepository;
 
     @Override
     public ResponseDto createSurvey(Long researcherId, SurveyDto surveyDto) {
@@ -58,6 +57,12 @@ public class SurveyServiceImpl implements SurveyService {
                 survey.setPaidDate(new Date());
             }
             surveyRepository.save(survey);
+            UserSurvey userSurvey = new UserSurvey().builder()
+                            .id(survey.getId())
+                            .expiredAt(survey.getExpiringDate())
+                            .isDeleted(survey.getIsDeleted())
+                            .build();
+            userSurveyRepository.save(userSurvey);
             log.info(CommonMessages.SURVEY_SAVED);
             surveyQuestionRepository.save(SurveyQuestion.builder()
                     .surveyId(survey.getId())
@@ -92,6 +97,7 @@ public class SurveyServiceImpl implements SurveyService {
             log.info(CommonMessages.GET_SURVEY_SUCCESS);
             return responseDto;
         }catch (Exception e){
+            log.error(e.getMessage());
             return ResponseDto.builder()
                     .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
@@ -113,6 +119,7 @@ public class SurveyServiceImpl implements SurveyService {
             log.info(CommonMessages.GET_SURVEY_Q_SUCCESS);
             return responseDto;
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseDto.builder()
                     .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
@@ -143,6 +150,7 @@ public class SurveyServiceImpl implements SurveyService {
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                     .build();
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseDto.builder()
                     .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
@@ -169,6 +177,7 @@ public class SurveyServiceImpl implements SurveyService {
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                     .build();
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseDto.builder()
                     .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
@@ -185,6 +194,7 @@ public class SurveyServiceImpl implements SurveyService {
             survey.setIsDeleted(true);
             surveyRepository.save(survey);
             surveyQuestionRepository.deleteBySurveyId(surveyId);
+            userSurveyRepository.updateIsDeleted(surveyId, true);
             log.info(CommonMessages.SURVEY_DELETE);
             return ResponseDto.builder()
                     .message(CommonMessages.SURVEY_DELETE)
@@ -192,6 +202,7 @@ public class SurveyServiceImpl implements SurveyService {
                     .data(survey)
                     .build();
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseDto.builder()
                     .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
@@ -213,6 +224,7 @@ public class SurveyServiceImpl implements SurveyService {
             log.info(CommonMessages.GET_SURVEY_A_SUCCESS);
             return  responseDto;
         } catch (Exception e) {
+            log.error(e.getMessage());
             return  ResponseDto.builder()
                     .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)

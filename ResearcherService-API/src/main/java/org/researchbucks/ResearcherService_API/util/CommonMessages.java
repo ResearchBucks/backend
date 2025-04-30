@@ -14,4 +14,19 @@ public class CommonMessages {
     public static final String GET_RESEARCHER_SUCCESS = "Researcher data retrieved successfully";
     public static final String RESEARCHER_UPDATED = "Researcher details updated";
     public static final String RESEARCHER_DELETED = "Researcher account deleted successfully";
+    public static final String SURVEY_SAVED = "Survey saved successfully";
+    public static final String SURVEY_Q_SAVED = "Survey questions saved successfully";
+    public static final String GET_SURVEY = "Getting survey details";
+    public static final String GET_SURVEY_SUCCESS = "Successfully fetched survey details";
+    public static final String GET_SURVEY_Q = "Getting survey questions";
+    public static final String GET_SURVEY_Q_SUCCESS = "Survey questions fetched successfully";
+    public static final String UPDATE_SURVEY = "Updating survey details";
+    public static final String SURVEY_UPDATED = "Survey details successfully updated";
+    public static final String INVALID_SURVEY = "Invalid survey";
+    public static final String UPDATE_PAYMENT = "Updating survey payment status";
+    public static final String PAYMENT_UPDATED = "Payment status updated";
+    public static final String SURVEY_DELETE = "Survey deleted";
+    public static final String PAYMENT_OVERDUE = "Payment overdue";
+    public static final String GET_SURVEY_A = "Getting survey responses";
+    public static final String GET_SURVEY_A_SUCCESS = "Successfully retrieved survey responses";
 }

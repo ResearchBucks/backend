@@ -3,14 +3,11 @@ package org.researchbucks.ResearcherService_API.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.researchbucks.ResearcherService_API.util.CommonMessages;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.*;
 
 @Data
 @Builder
@@ -60,4 +57,10 @@ public class Researcher implements Serializable {
 
     @Column(name = "is_verified")
     private Boolean isVerified;
+
+    @ToString.Exclude
+    @JsonIgnore
+    @OneToMany(mappedBy = "researcher", orphanRemoval = true)
+    private List<Survey> surveys = new ArrayList<>();
+
 }

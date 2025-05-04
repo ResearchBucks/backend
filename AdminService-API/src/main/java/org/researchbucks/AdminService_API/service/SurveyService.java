@@ -9,4 +9,8 @@ public interface SurveyService {
     ResponseDto getSurveyQuestionsById(Long surveyId);
 
     ResponseDto approveSurvey(Long surveyId);
+
+    ResponseDto approvePaymentRefund(Long surveyId);
+
+    ResponseDto notifySurveyRejection(Long surveyId);
 }

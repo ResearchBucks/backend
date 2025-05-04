@@ -40,10 +40,36 @@ public class SurveyController {
         );
     }
 
+    /************************
+     Approve a survey
+     Return type: ResponseEntity
+     ************************/
     @PostMapping("/approveSurvey/{surveyId}")
     public ResponseEntity<ResponseDto> approveSurvey(@PathVariable Long surveyId){
         return ResponseEntity.ok().body(
           surveyService.approveSurvey(surveyId)
+        );
+    }
+
+    /************************
+     Update payment status after refund approval
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/approvePaymentRefund/{surveyId}")
+    public ResponseEntity<ResponseDto> approvePaymentRefund(@PathVariable Long surveyId){
+        return ResponseEntity.ok().body(
+          surveyService.approvePaymentRefund(surveyId)
+        );
+    }
+
+    /************************
+     Notify researcher via email about survey rejection
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/notifySurveyRejection/{surveyId}")
+    public ResponseEntity<ResponseDto> notifySurveyRejection(@PathVariable Long surveyId){
+        return ResponseEntity.ok().body(
+          surveyService.notifySurveyRejection(surveyId)
         );
     }
 }

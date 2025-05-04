@@ -21,4 +21,7 @@ public class CommonMessages {
     public static final String GET_SURVEY_Q_SUCCESS = "Survey questions fetched successfully";
     public static final String APPROVED_SURVEY = "Survey already approved";
     public static final String SURVEY_APPROVED = "Survey approved";
+    public static final String SURVEY_NOT_PAID = "Survey price not paid or already refunded";
+    public static final String REFUNDED = "Payment refunded";
+    public static final String NOTIFIED_R = "Email notification sent to researcher";
 }

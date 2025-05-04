@@ -13,7 +13,6 @@ import java.util.Map;
 @Builder
 @Document(collection = "survey_responses")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Immutable
 public class SurveyData {
 
     @Id

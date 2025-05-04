@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.hibernate.annotations.Immutable;
 import org.researchbucks.AdminService_API.util.CommonMessages;
 
 import java.io.Serializable;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Immutable
 @Data
 @Builder
 @AllArgsConstructor
@@ -51,6 +49,10 @@ public class Researcher implements Serializable {
 
     @Column(name = "created_date")
     private Date createdDate;
+
+    @JsonIgnore
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;

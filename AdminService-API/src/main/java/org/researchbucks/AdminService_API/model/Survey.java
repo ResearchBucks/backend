@@ -1,17 +1,18 @@
-package org.researchbucks.ResearcherService_API.model;
+package org.researchbucks.AdminService_API.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.researchbucks.ResearcherService_API.enums.PaymentStatus;
+import org.hibernate.annotations.Immutable;
+import org.researchbucks.AdminService_API.enums.PaymentStatus;
 
 import java.io.Serializable;
 import java.util.Date;
 
+@Immutable
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "survey")
 public class Survey implements Serializable {
@@ -58,9 +59,15 @@ public class Survey implements Serializable {
     @Column(name = "approved_date")
     private Date approvedDate;
 
-    @JsonIgnore
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "created_by")
     private Researcher researcher;
 }
+
+
+
+
+
+
+

@@ -11,4 +11,8 @@ public interface UserService {
     ResponseDto lockResearcher(Long researcherId);
 
     ResponseDto unlockResearcher(Long researcherId);
+
+    ResponseDto getAllResearchers();
+
+    ResponseDto getAllRespondents();
 }

@@ -104,4 +104,44 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
     }
+
+    @Override
+    public ResponseDto getAllResearchers() {
+        try {
+            log.info(CommonMessages.GET_USER);
+            ResponseDto responseDto = new ResponseDto<>().builder()
+                    .message(CommonMessages.GET_USER_SUCCESS)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(researcherRepository.findAll())
+                    .build();
+            log.info(CommonMessages.GET_USER_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
+
+    @Override
+    public ResponseDto getAllRespondents() {
+        try{
+            log.info(CommonMessages.GET_USER);
+            ResponseDto responseDto = new ResponseDto<>().builder()
+                    .message(CommonMessages.GET_USER_SUCCESS)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .data(respondentRepository.findAll())
+                    .build();
+            log.info(CommonMessages.GET_USER_SUCCESS);
+            return responseDto;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
 }

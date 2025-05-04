@@ -28,4 +28,5 @@ public class CommonMessages {
     public static final String INVALID_USER = "User account is deleted or locked";
     public static final String USER_LOCKED = "User account locked";
     public static final String USER_UNLOCKED = "User account unlocked";
+    public static final String GET_USER_SUCCESS = "User details retrieved successfully";
 }

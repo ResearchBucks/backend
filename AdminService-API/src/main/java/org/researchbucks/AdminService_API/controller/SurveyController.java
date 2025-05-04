@@ -6,10 +6,7 @@ import org.researchbucks.AdminService_API.repository.SurveyRepository;
 import org.researchbucks.AdminService_API.service.SurveyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/survey")
@@ -40,6 +37,13 @@ public class SurveyController {
     public ResponseEntity<ResponseDto> getSurveyQuestionsById(@PathVariable Long surveyId){
         return ResponseEntity.ok().body(
                 surveyService.getSurveyQuestionsById(surveyId)
+        );
+    }
+
+    @PostMapping("/approveSurvey/{surveyId}")
+    public ResponseEntity<ResponseDto> approveSurvey(@PathVariable Long surveyId){
+        return ResponseEntity.ok().body(
+          surveyService.approveSurvey(surveyId)
         );
     }
 }

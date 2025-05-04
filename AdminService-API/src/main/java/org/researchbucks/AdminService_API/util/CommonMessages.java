@@ -19,4 +19,6 @@ public class CommonMessages {
     public static final String GET_SURVEY_Q = "Getting survey questions...";
     public static final String INVALID_SURVEY = "Invalid survey";
     public static final String GET_SURVEY_Q_SUCCESS = "Survey questions fetched successfully";
+    public static final String APPROVED_SURVEY = "Survey already approved";
+    public static final String SURVEY_APPROVED = "Survey approved";
 }

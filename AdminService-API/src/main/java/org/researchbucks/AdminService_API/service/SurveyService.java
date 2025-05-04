@@ -7,4 +7,6 @@ public interface SurveyService {
     ResponseDto getAllSurveys();
 
     ResponseDto getSurveyQuestionsById(Long surveyId);
+
+    ResponseDto approveSurvey(Long surveyId);
 }

@@ -13,4 +13,10 @@ public class CommonMessages {
     public static final String ADMIN_DELETE_SUCCESS = "Admin deleted successfully";
     public static final String ADMIN_UPDATED = "Admin data updated";
     public static final String ADMIN_R_UPDATED = "Admin Role updated";
+    public static final String GET_SURVEY = "Getting survey data...";
+    public static final String GET_SURVEY_SUCCESS = "Successfully fetched survey data";
+    public static final String INVALID_EMAIL = "Invalid Email";
+    public static final String GET_SURVEY_Q = "Getting survey questions...";
+    public static final String INVALID_SURVEY = "Invalid survey";
+    public static final String GET_SURVEY_Q_SUCCESS = "Survey questions fetched successfully";
 }

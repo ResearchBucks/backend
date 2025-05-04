@@ -1,16 +1,16 @@
 package org.researchbucks.AdminService_API.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 import org.researchbucks.AdminService_API.util.CommonMessages;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Immutable
 @Data
@@ -18,8 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "researcher")
-public class Researcher implements Serializable {
+@Table(name = "respondent")
+public class Respondent implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -32,9 +32,6 @@ public class Researcher implements Serializable {
 
     @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "occupation")
-    private String occupation;
 
     @Email(message = CommonMessages.INVALID_EMAIL)
     @Column(name = "email", nullable = false)
@@ -55,14 +52,12 @@ public class Researcher implements Serializable {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
+    @Column(name = "total_earnings")
+    private Integer totalEarnings;
+
     @Column(name = "is_verified")
     private Boolean isVerified;
 
     @Column(name = "is_locked")
     private Boolean isLocked;
-
-    @ToString.Exclude
-    @JsonIgnore
-    @OneToMany(mappedBy = "researcher", orphanRemoval = true)
-    private List<Survey> surveys = new ArrayList<>();
 }

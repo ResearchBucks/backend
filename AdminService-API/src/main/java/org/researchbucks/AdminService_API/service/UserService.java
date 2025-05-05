@@ -15,4 +15,6 @@ public interface UserService {
     ResponseDto getAllResearchers();
 
     ResponseDto getAllRespondents();
+
+    ResponseDto updateRespondentEarnings(Long surveyId);
 }

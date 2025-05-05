@@ -61,6 +61,7 @@ public class SurveyServiceImpl implements SurveyService {
                             .id(survey.getId())
                             .expiredAt(survey.getExpiringDate())
                             .isDeleted(survey.getIsDeleted())
+                            .isPaidToRespondents(false)
                             .build();
             userSurveyRepository.save(userSurvey);
             log.info(CommonMessages.SURVEY_SAVED);

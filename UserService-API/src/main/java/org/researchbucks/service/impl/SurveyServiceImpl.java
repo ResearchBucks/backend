@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.researchbucks.dto.ResponseDto;
 import org.researchbucks.dto.SurveyAnswersDto;
 import org.researchbucks.model.Respondent;
-import org.researchbucks.model.Survey;
+import org.researchbucks.model.UserSurvey;
 import org.researchbucks.model.SurveyData;
 import org.researchbucks.repository.SurveyDataRepository;
 import org.researchbucks.repository.SurveyRepository;
@@ -14,7 +14,6 @@ import org.researchbucks.util.CommonMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,7 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public ResponseDto storeSurveyAnswers(Long surveyId, Long userId, List<SurveyAnswersDto> surveyAnswersDto) {
         try {
-            Survey survey = surveyRepository.findById(surveyId).get();
+            UserSurvey survey = surveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.SURVEY_DELETED);
             if(surveyDataRepository.existsBySurveyIdAndUserId(surveyId, userId)) throw new Exception(CommonMessages.SURVEY_ALREADY_ANSWERED);
             Respondent respondent = userRepository.findById(userId).get();

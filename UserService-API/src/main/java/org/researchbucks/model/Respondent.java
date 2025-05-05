@@ -63,6 +63,6 @@ public class Respondent implements Serializable {
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "respondents")
-    private List<Survey> survey = new ArrayList<>();
+    private List<UserSurvey> survey = new ArrayList<>();
 
 }

@@ -7,7 +7,9 @@ import lombok.*;
 import org.researchbucks.AdminService_API.util.CommonMessages;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -60,4 +62,8 @@ public class Respondent implements Serializable {
 
     @Column(name = "is_locked")
     private Boolean isLocked;
+
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "respondents")
+    private List<UserSurvey> survey = new ArrayList<>();
 }

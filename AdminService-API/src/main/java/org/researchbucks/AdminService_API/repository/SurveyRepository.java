@@ -25,4 +25,7 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
     @Transactional
     @Query("UPDATE Survey s SET s.paymentStatus = ?1 WHERE s.id = ?2")
     void updatePaymentStatus(PaymentStatus paymentStatus, Long surveyId);
+
+    @Query("SELECT s.paymentPerUser FROM Survey s WHERE s.id = ?1")
+    Integer findPaymentPerUserById(Long id);
 }

@@ -29,4 +29,6 @@ public class CommonMessages {
     public static final String USER_LOCKED = "User account locked";
     public static final String USER_UNLOCKED = "User account unlocked";
     public static final String GET_USER_SUCCESS = "User details retrieved successfully";
+    public static final String EARNINGS_UPDATED = "Respondents earnings updated";
+    public static final String EARNIGS_ALREADY_UPDATED = "Earnings already updated";
 }

@@ -80,4 +80,15 @@ public class UserController {
                 userService.getAllRespondents()
         );
     }
+
+    /************************
+     update the earnings of all the respondents who answered to a specific survey
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/updateRespondentEarnings/{surveyId}")
+    public ResponseEntity<ResponseDto> updateRespondentEarnings(@PathVariable Long surveyId){
+        return ResponseEntity.ok().body(
+                userService.updateRespondentEarnings(surveyId)
+        );
+    }
 }

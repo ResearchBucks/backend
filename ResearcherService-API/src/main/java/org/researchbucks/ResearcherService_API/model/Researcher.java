@@ -58,6 +58,9 @@ public class Researcher implements Serializable {
     @Column(name = "is_verified")
     private Boolean isVerified;
 
+    @Column(name = "is_locked")
+    private Boolean isLocked;
+
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "researcher", orphanRemoval = true)

@@ -1,10 +1,12 @@
-package org.researchbucks.ResearcherService_API.model;
+package org.researchbucks.AdminService_API.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -27,4 +29,16 @@ public class UserSurvey implements Serializable {
 
     @Column(name = "paid_to_respondents", nullable = false)
     private Boolean isPaidToRespondents;
+
+    @ToString.Exclude
+    @ManyToMany
+    @JoinTable(name = "survey_respondents",
+            joinColumns = @JoinColumn(name = "survey_id"),
+            inverseJoinColumns = @JoinColumn(name = "respondents_id"))
+    private List<Respondent> respondents = new ArrayList<>();
+
+    public void addRespondent(Respondent respondent) {
+        this.respondents.add(respondent);
+        respondent.getSurvey().add(this);
+    }
 }

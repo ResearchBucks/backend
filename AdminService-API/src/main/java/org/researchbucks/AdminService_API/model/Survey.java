@@ -2,13 +2,12 @@ package org.researchbucks.AdminService_API.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Immutable;
 import org.researchbucks.AdminService_API.enums.PaymentStatus;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@Immutable
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

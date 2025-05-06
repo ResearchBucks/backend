@@ -36,6 +36,7 @@ public class ResearcherServiceImpl implements ResearcherService {
                     .createdDate(date)
                     .isVerified(false)
                     .isDeleted(false)
+                    .isLocked(false)
                     .build();
             researcherRepository.save(researcher);
             //ToDo: send verification email

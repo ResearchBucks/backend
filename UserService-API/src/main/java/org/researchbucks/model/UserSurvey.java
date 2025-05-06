@@ -12,7 +12,7 @@ import java.util.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "user_survey")
-public class Survey implements Serializable {
+public class UserSurvey implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -24,6 +24,9 @@ public class Survey implements Serializable {
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+
+    @Column(name = "paid_to_respondents", nullable = false)
+    private Boolean isPaidToRespondents;
 
     @ToString.Exclude
     @ManyToMany

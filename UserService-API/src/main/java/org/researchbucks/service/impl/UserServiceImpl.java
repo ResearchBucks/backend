@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
                     .isVerified(false)
                     .totalEarnings(defaultEarning)
                     .isDeleted(false)
+                    .isLocked(false)
                     .build();
             userRepository.save(respondent);
             //ToDo: send verification email

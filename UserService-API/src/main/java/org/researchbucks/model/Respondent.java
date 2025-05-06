@@ -58,8 +58,11 @@ public class Respondent implements Serializable {
     @Column(name = "is_verified")
     private Boolean isVerified;
 
+    @Column(name = "is_locked")
+    private Boolean isLocked;
+
     @ToString.Exclude
     @ManyToMany(mappedBy = "respondents")
-    private List<Survey> survey = new ArrayList<>();
+    private List<UserSurvey> survey = new ArrayList<>();
 
 }

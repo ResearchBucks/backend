@@ -5,11 +5,13 @@ import org.researchbucks.AdminService_API.model.Survey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
     List<Survey> getAllByIsDeletedIsFalse();
@@ -23,4 +25,7 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
     @Transactional
     @Query("UPDATE Survey s SET s.paymentStatus = ?1 WHERE s.id = ?2")
     void updatePaymentStatus(PaymentStatus paymentStatus, Long surveyId);
+
+    @Query("SELECT s.paymentPerUser FROM Survey s WHERE s.id = ?1")
+    Integer findPaymentPerUserById(Long id);
 }

@@ -24,4 +24,11 @@ public class CommonMessages {
     public static final String SURVEY_NOT_PAID = "Survey price not paid or already refunded";
     public static final String REFUNDED = "Payment refunded";
     public static final String NOTIFIED_R = "Email notification sent to researcher";
+    public static final String GET_USER = "Getting user details...";
+    public static final String INVALID_USER = "User account is deleted or locked";
+    public static final String USER_LOCKED = "User account locked";
+    public static final String USER_UNLOCKED = "User account unlocked";
+    public static final String GET_USER_SUCCESS = "User details retrieved successfully";
+    public static final String EARNINGS_UPDATED = "Respondents earnings updated";
+    public static final String EARNIGS_ALREADY_UPDATED = "Earnings already updated";
 }

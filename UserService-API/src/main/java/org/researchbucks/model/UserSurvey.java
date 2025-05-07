@@ -1,5 +1,7 @@
 package org.researchbucks.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,6 +30,7 @@ public class UserSurvey implements Serializable {
     @Column(name = "paid_to_respondents", nullable = false)
     private Boolean isPaidToRespondents;
 
+    @JsonBackReference
     @ToString.Exclude
     @ManyToMany
     @JoinTable(name = "survey_respondents",

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/researcher/survey")
 @Slf4j
 public class SurveyController {
 

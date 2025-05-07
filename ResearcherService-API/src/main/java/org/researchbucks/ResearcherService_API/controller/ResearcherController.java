@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/researcher")
+@RequestMapping("/researcher/user")
 @Slf4j
 public class ResearcherController {
 

@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/admin-panel")
+@RequestMapping("/admin/admin-panel")
 @Slf4j
 public class AdminController {
 

@@ -1,4 +1,4 @@
-package org.researchbucks;
+package org.researchbucks.API_Gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class UserService_API {
+public class ApiGatewayApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(UserService_API.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(ApiGatewayApplication.class, args);
+	}
 
 }

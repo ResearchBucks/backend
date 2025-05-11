@@ -1,6 +1,7 @@
 package org.researchbucks.AdminService_API.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -63,6 +64,7 @@ public class Respondent implements Serializable {
     @Column(name = "is_locked")
     private Boolean isLocked;
 
+    @JsonManagedReference
     @ToString.Exclude
     @ManyToMany(mappedBy = "respondents")
     private List<UserSurvey> survey = new ArrayList<>();

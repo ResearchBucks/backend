@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/respondent/survey")
 @Slf4j
 public class SurveyController {
 

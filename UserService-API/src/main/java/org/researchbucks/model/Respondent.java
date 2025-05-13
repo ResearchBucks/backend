@@ -62,6 +62,9 @@ public class Respondent implements Serializable {
     @Column(name = "is_locked")
     private Boolean isLocked;
 
+    @Column(name = "role", nullable = false)
+    private Role role;
+
     @JsonManagedReference
     @ToString.Exclude
     @ManyToMany(mappedBy = "respondents")

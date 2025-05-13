@@ -5,6 +5,7 @@ import org.researchbucks.dto.RespondentUpdateDto;
 import org.researchbucks.dto.ResponseDto;
 import org.researchbucks.dto.UserRegDto;
 import org.researchbucks.model.Respondent;
+import org.researchbucks.model.Role;
 import org.researchbucks.repository.UserRepository;
 import org.researchbucks.service.UserService;
 import org.researchbucks.util.CommonMessages;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
                     .totalEarnings(defaultEarning)
                     .isDeleted(false)
                     .isLocked(false)
+                    .role(Role.RESPONDENT)
                     .build();
             userRepository.save(respondent);
             //ToDo: send verification email

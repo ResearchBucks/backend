@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 "/configuration/**",
                                 "/webjars/**"
                         ).permitAll()
+                        .requestMatchers("/respondent/**").hasRole("RESPONDENT")
                         .anyRequest().authenticated());
         http.sessionManagement(
                 session ->

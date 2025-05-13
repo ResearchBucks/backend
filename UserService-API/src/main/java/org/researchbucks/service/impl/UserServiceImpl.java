@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
                     .totalEarnings(defaultEarning)
                     .isDeleted(false)
                     .isLocked(false)
-                    .role(Role.RESPONDENT)
+                    .role(Role.ROLE_RESPONDENT)
                     .build();
             userRepository.save(respondent);
             //ToDo: send verification email

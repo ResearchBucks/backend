@@ -29,4 +29,13 @@ public class CommonMessages {
     public static final String PAYMENT_OVERDUE = "Payment overdue";
     public static final String GET_SURVEY_A = "Getting survey responses";
     public static final String GET_SURVEY_A_SUCCESS = "Successfully retrieved survey responses";
+    public static final String INVALID_JWT = "Invalid JWT token: {}";
+    public static final String EXPIRED_JWT = "JWT token is expired: {}";
+    public static final String UNSUPPORTED_JWT = "JWT token is unsupported: {}";
+    public static final String CLAIMS_ERROR = "JWT claims string is empty: {}";
+    public static final String UNAUTH_ERROR = "Unauthorized error: {}";
+    public static final String BAD_CREDENTIALS = "Bad Credentials";
+    public static final String AUTHENTICATED = "User Authenticated";
+    public static final String AUTH_CALL = "AuthTokenFilter called for URI: {}";
+    public static final String CANNOT_AUTH = "Cannot set user authentication: {}";
 }

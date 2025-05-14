@@ -1,4 +1,4 @@
-package org.researchbucks.model;
+package org.researchbucks.enums;
 
 public enum Role {
 

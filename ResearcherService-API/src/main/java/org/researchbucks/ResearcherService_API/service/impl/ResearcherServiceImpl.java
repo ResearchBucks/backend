@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.researchbucks.ResearcherService_API.dto.ResearcherRegDto;
 import org.researchbucks.ResearcherService_API.dto.ResearcherUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
+import org.researchbucks.ResearcherService_API.enums.Role;
 import org.researchbucks.ResearcherService_API.model.Researcher;
 import org.researchbucks.ResearcherService_API.repository.ResearcherRepository;
 import org.researchbucks.ResearcherService_API.service.ResearcherService;
@@ -37,6 +38,7 @@ public class ResearcherServiceImpl implements ResearcherService {
                     .isVerified(false)
                     .isDeleted(false)
                     .isLocked(false)
+                    .role(Role.ROLE_RESEARCHER)
                     .build();
             researcherRepository.save(researcher);
             //ToDo: send verification email

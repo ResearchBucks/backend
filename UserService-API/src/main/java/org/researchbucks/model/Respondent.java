@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.researchbucks.enums.Role;
 import org.researchbucks.util.CommonMessages;
 
 import java.io.Serializable;

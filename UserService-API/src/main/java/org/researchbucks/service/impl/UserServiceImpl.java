@@ -5,7 +5,7 @@ import org.researchbucks.dto.RespondentUpdateDto;
 import org.researchbucks.dto.ResponseDto;
 import org.researchbucks.dto.UserRegDto;
 import org.researchbucks.model.Respondent;
-import org.researchbucks.model.Role;
+import org.researchbucks.enums.Role;
 import org.researchbucks.repository.UserRepository;
 import org.researchbucks.service.UserService;
 import org.researchbucks.util.CommonMessages;

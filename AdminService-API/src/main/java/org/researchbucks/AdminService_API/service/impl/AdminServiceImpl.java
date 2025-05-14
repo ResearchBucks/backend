@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -147,7 +146,7 @@ public class AdminServiceImpl implements AdminService {
             log.info(CommonMessages.GET_ADMIN);
             Admin admin =  adminRepository.findById(adminId).get();
             if(admin.getIsDeleted()) throw new Exception(CommonMessages.INVALID_ADMIN);
-            admin.setRole(AdminRole.SUPER_ADMIN);
+            admin.setRole(AdminRole.ROLE_SUPER_ADMIN);
             adminRepository.save(admin);
             log.info(CommonMessages.ADMIN_R_UPDATED);
             return ResponseDto.builder()

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.researchbucks.AdminService_API.enums.Role;
 import org.researchbucks.AdminService_API.util.CommonMessages;
 
 import java.io.Serializable;
@@ -62,6 +63,9 @@ public class Researcher implements Serializable {
 
     @Column(name = "is_locked")
     private Boolean isLocked;
+
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @ToString.Exclude
     @JsonIgnore

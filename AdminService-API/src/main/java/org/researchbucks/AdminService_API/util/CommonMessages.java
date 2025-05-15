@@ -31,4 +31,13 @@ public class CommonMessages {
     public static final String GET_USER_SUCCESS = "User details retrieved successfully";
     public static final String EARNINGS_UPDATED = "Respondents earnings updated";
     public static final String EARNIGS_ALREADY_UPDATED = "Earnings already updated";
+    public static final String INVALID_JWT = "Invalid JWT token: {}";
+    public static final String EXPIRED_JWT = "JWT token is expired: {}";
+    public static final String UNSUPPORTED_JWT = "JWT token is unsupported: {}";
+    public static final String CLAIMS_ERROR = "JWT claims string is empty: {}";
+    public static final String UNAUTH_ERROR = "Unauthorized error: {}";
+    public static final String BAD_CREDENTIALS = "Bad Credentials";
+    public static final String AUTHENTICATED = "User Authenticated";
+    public static final String AUTH_CALL = "AuthTokenFilter called for URI: {}";
+    public static final String CANNOT_AUTH = "Cannot set user authentication: {}";
 }

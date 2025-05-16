@@ -26,12 +26,19 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private RespondentDetailsService respondentDetailsService;
 
+    @Autowired
+    private TokenRevokeService tokenRevokeService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         log.info(CommonMessages.AUTH_CALL, request.getRequestURI());
         try {
             String jwt = parseJwt(request);
+            if (jwt != null && tokenRevokeService.isTokenBlacklisted(jwt)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, CommonMessages.TOKEN_BLACKLIST);
+                return;
+            }
             if (jwt != null && jwtUtil.validateJwtToken(jwt)) {
                 String username = jwtUtil.getUserNameFromJwtToken(jwt);
                 UserDetails userDetails = respondentDetailsService.loadUserByUsername(username);

@@ -2,6 +2,7 @@ package org.researchbucks.AdminService_API.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.researchbucks.AdminService_API.dto.ResponseDto;
+import org.researchbucks.AdminService_API.service.AdminService;
 import org.researchbucks.AdminService_API.util.CommonMessages;
 import org.researchbucks.AdminService_API.util.jwt.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenRevokeService tokenRevokeService;
+    @Autowired
+    private AdminService adminService;
 
     /************************
      Admin login
@@ -84,7 +87,9 @@ public class AuthController {
     public ResponseEntity<ResponseDto> logOutUser(HttpServletRequest request){
         String token = jwtUtil.getJwtFromHeader(request);
         long ttl = jwtUtil.getTTL(token);
+        String email = jwtUtil.getUserNameFromJwtToken(token);
         tokenRevokeService.blacklistToken(token, ttl);
+        adminService.markLastLogin(email);
         return ResponseEntity.ok().body(
                 ResponseDto.builder()
                         .message(CommonMessages.LOGOUT)

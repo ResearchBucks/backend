@@ -17,4 +17,6 @@ public interface AdminService {
     ResponseDto updateAdmin(AdminUpdateDto adminUpdateDto, Long adminId);
 
     ResponseDto changeAdminRole(Long adminId);
+
+    void markLastLogin(String email);
 }

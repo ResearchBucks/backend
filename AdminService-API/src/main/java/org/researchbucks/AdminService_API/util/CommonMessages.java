@@ -44,4 +44,5 @@ public class CommonMessages {
     public static final String TOKEN_BLACKLIST = "Token is blacklisted";
     public static final String LOGOUT = "User logged out successfully";
     public static final String ALGO_EXEPTION = "SHA-256 algorithm not available";
+    public static final String LOGIN_MARKED = "Last login recorded";
 }

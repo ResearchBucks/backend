@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.time.Instant;
 import java.util.Date;
 
 @Slf4j
@@ -50,6 +51,15 @@ public class JwtUtil {
                 .verifyWith((SecretKey) key())
                 .build().parseSignedClaims(token)
                 .getPayload().getSubject();
+    }
+
+    public long getTTL(String token){
+        Date expiration = Jwts.parser()
+                .verifyWith((SecretKey) key())
+                .build().parseSignedClaims(token)
+                .getPayload().getExpiration();
+        long now = Instant.now().getEpochSecond();
+        return (expiration.getTime() / 1000) - now;
     }
 
     private Key key() {

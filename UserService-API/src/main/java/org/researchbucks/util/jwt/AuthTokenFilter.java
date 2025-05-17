@@ -36,6 +36,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null && tokenRevokeService.isTokenBlacklisted(jwt)) {
+                log.error(CommonMessages.TOKEN_BLACKLIST);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, CommonMessages.TOKEN_BLACKLIST);
                 return;
             }

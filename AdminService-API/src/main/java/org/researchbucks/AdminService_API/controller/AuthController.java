@@ -1,11 +1,10 @@
 package org.researchbucks.AdminService_API.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.researchbucks.AdminService_API.dto.ResponseDto;
+import org.researchbucks.AdminService_API.service.AdminService;
 import org.researchbucks.AdminService_API.util.CommonMessages;
-import org.researchbucks.AdminService_API.util.jwt.AdminDetails;
-import org.researchbucks.AdminService_API.util.jwt.JwtAuthenticationRequest;
-import org.researchbucks.AdminService_API.util.jwt.JwtAuthenticationResponse;
-import org.researchbucks.AdminService_API.util.jwt.JwtUtil;
+import org.researchbucks.AdminService_API.util.jwt.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +28,10 @@ public class AuthController {
     private JwtUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private TokenRevokeService tokenRevokeService;
+    @Autowired
+    private AdminService adminService;
 
     /************************
      Admin login
@@ -72,6 +75,25 @@ public class AuthController {
                         .message(CommonMessages.AUTHENTICATED)
                         .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                         .data(response)
+                        .build()
+        );
+    }
+
+    /************************
+     Admin logout
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/logout")
+    public ResponseEntity<ResponseDto> logOutUser(HttpServletRequest request){
+        String token = jwtUtil.getJwtFromHeader(request);
+        long ttl = jwtUtil.getTTL(token);
+        String email = jwtUtil.getUserNameFromJwtToken(token);
+        tokenRevokeService.blacklistToken(token, ttl);
+        adminService.markLastLogin(email);
+        return ResponseEntity.ok().body(
+                ResponseDto.builder()
+                        .message(CommonMessages.LOGOUT)
+                        .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                         .build()
         );
     }

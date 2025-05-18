@@ -1,11 +1,9 @@
 package org.researchbucks.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.researchbucks.dto.ResponseDto;
 import org.researchbucks.util.CommonMessages;
-import org.researchbucks.util.jwt.JwtAuthenticationRequest;
-import org.researchbucks.util.jwt.JwtAuthenticationResponse;
-import org.researchbucks.util.jwt.JwtUtil;
-import org.researchbucks.util.jwt.RespondentDetails;
+import org.researchbucks.util.jwt.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +24,8 @@ public class AuthController {
     private JwtUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private TokenRevokeService tokenRevokeService;
 
     /************************
      Respondent login
@@ -69,6 +69,23 @@ public class AuthController {
                         .message(CommonMessages.AUTHENTICATED)
                         .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                         .data(response)
+                        .build()
+        );
+    }
+
+    /************************
+     Respondent logout
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/logout")
+    public ResponseEntity<ResponseDto> logOutUser(HttpServletRequest request){
+        String token = jwtUtil.getJwtFromHeader(request);
+        long ttl = jwtUtil.getTTL(token);
+        tokenRevokeService.blacklistToken(token, ttl);
+        return ResponseEntity.ok().body(
+                ResponseDto.builder()
+                        .message(CommonMessages.LOGOUT)
+                        .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                         .build()
         );
     }

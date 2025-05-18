@@ -161,4 +161,19 @@ public class AdminServiceImpl implements AdminService {
                     .build();
         }
     }
+
+    @Override
+    public void markLastLogin(String email) {
+        try {
+            log.info(CommonMessages.GET_ADMIN);
+            Admin admin = adminRepository.findByEmail(email);
+            if(admin.getIsDeleted()) throw new Exception(CommonMessages.INVALID_ADMIN);
+            admin.setLastLogin(new Date());
+            adminRepository.save(admin);
+            log.info(CommonMessages.LOGIN_MARKED);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 }

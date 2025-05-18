@@ -33,4 +33,8 @@ public class CommonMessages {
     public static final String AUTHENTICATED = "User Authenticated";
     public static final String AUTH_CALL = "AuthTokenFilter called for URI: {}";
     public static final String CANNOT_AUTH = "Cannot set user authentication: {}";
+    public static final String BLACKLIST = "Blacklisted";
+    public static final String TOKEN_BLACKLIST = "Token is blacklisted";
+    public static final String LOGOUT = "User logged out successfully";
+    public static final String ALGO_EXEPTION = "SHA-256 algorithm not available";
 }

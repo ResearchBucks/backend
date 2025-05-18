@@ -1,14 +1,17 @@
 package org.researchbucks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.dto.EmailParamDto;
 import org.researchbucks.dto.RespondentUpdateDto;
 import org.researchbucks.dto.ResponseDto;
 import org.researchbucks.dto.UserRegDto;
 import org.researchbucks.model.Respondent;
 import org.researchbucks.enums.Role;
 import org.researchbucks.repository.UserRepository;
+import org.researchbucks.service.EmailService;
 import org.researchbucks.service.UserService;
 import org.researchbucks.util.CommonMessages;
+import org.researchbucks.util.EmailCreateUtil;
 import org.researchbucks.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public ResponseDto registerRespondent(UserRegDto userRegDto){
@@ -45,7 +50,9 @@ public class UserServiceImpl implements UserService {
                     .role(Role.ROLE_RESPONDENT)
                     .build();
             userRepository.save(respondent);
-            //ToDo: send verification email
+            //ToDo: create email verification link
+            EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(userRegDto.getFirstName(), "tempurl.org");
+            emailService.sendEmail(userRegDto.getEmail(), emailParamDto);
             log.info(CommonMessages.RESPONDENT_SAVED_SUCCESSFULLY);
             return ResponseDto.builder().
                     message(CommonMessages.RESPONDENT_SAVED_SUCCESSFULLY).

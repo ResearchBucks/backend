@@ -1,13 +1,16 @@
 package org.researchbucks.AdminService_API.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.AdminService_API.dto.EmailParamDto;
 import org.researchbucks.AdminService_API.dto.ResponseDto;
 import org.researchbucks.AdminService_API.enums.PaymentStatus;
 import org.researchbucks.AdminService_API.model.Survey;
 import org.researchbucks.AdminService_API.repository.SurveyQuestionRepository;
 import org.researchbucks.AdminService_API.repository.SurveyRepository;
+import org.researchbucks.AdminService_API.service.EmailService;
 import org.researchbucks.AdminService_API.service.SurveyService;
 import org.researchbucks.AdminService_API.util.CommonMessages;
+import org.researchbucks.AdminService_API.util.EmailCreateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ public class SurveyServiceImpl implements SurveyService {
     private SurveyRepository surveyRepository;
     @Autowired
     private SurveyQuestionRepository surveyQuestionRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public ResponseDto getAllSurveys() {
@@ -72,7 +77,9 @@ public class SurveyServiceImpl implements SurveyService {
             if(survey.getIsVerified()) throw new Exception(CommonMessages.APPROVED_SURVEY);
             surveyRepository.approveSurvey(true, new Date(),surveyId);
             log.info(CommonMessages.SURVEY_APPROVED);
-            //ToDo: send email to researcher
+            EmailParamDto emailParamDto = EmailCreateUtil.createSurveyApprovalEmail(survey.getResearcher().getFirstName(),
+                    CommonMessages.EMAIL_B_APPROVE, CommonMessages.EMAIL_SUB_APPROVE);
+            emailService.sendEmail(survey.getResearcher().getEmail(), emailParamDto);
             return ResponseDto.builder()
                     .message(CommonMessages.SURVEY_APPROVED)
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)
@@ -95,7 +102,8 @@ public class SurveyServiceImpl implements SurveyService {
             if(!(survey.getPaymentStatus() == PaymentStatus.COMPLETED)) throw new Exception(CommonMessages.SURVEY_NOT_PAID);
             surveyRepository.updatePaymentStatus(PaymentStatus.REFUNDED, surveyId);
             log.info(CommonMessages.REFUNDED);
-            //ToDo: Send email notifcation to researcher
+            EmailParamDto emailParamDto = EmailCreateUtil.createRefundEmail(survey.getResearcher().getFirstName());
+            emailService.sendEmail(survey.getResearcher().getEmail(), emailParamDto);
             return ResponseDto.builder()
                     .message(CommonMessages.REFUNDED)
                     .status(CommonMessages.RESPONSE_DTO_SUCCESS)
@@ -115,8 +123,9 @@ public class SurveyServiceImpl implements SurveyService {
             log.info(CommonMessages.GET_SURVEY);
             Survey survey = surveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
-            String researcherEmail = survey.getResearcher().getEmail();
-            //ToDo: send email notification to researcher
+            EmailParamDto emailParamDto = EmailCreateUtil.createSurveyApprovalEmail(survey.getResearcher().getFirstName(),
+                    CommonMessages.EMAIL_B_REJECT, CommonMessages.EMAIL_SUB_REJECT);
+            emailService.sendEmail(survey.getResearcher().getEmail(), emailParamDto);
             log.info(CommonMessages.NOTIFIED_R);
             return ResponseDto.builder()
                     .message(CommonMessages.NOTIFIED_R)

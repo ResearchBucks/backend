@@ -1,14 +1,17 @@
 package org.researchbucks.ResearcherService_API.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.ResearcherService_API.dto.EmailParamDto;
 import org.researchbucks.ResearcherService_API.dto.ResearcherRegDto;
 import org.researchbucks.ResearcherService_API.dto.ResearcherUpdateDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.enums.Role;
 import org.researchbucks.ResearcherService_API.model.Researcher;
 import org.researchbucks.ResearcherService_API.repository.ResearcherRepository;
+import org.researchbucks.ResearcherService_API.service.EmailService;
 import org.researchbucks.ResearcherService_API.service.ResearcherService;
 import org.researchbucks.ResearcherService_API.util.CommonMessages;
+import org.researchbucks.ResearcherService_API.util.EmailCreateUtil;
 import org.researchbucks.ResearcherService_API.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,8 @@ public class ResearcherServiceImpl implements ResearcherService {
 
     @Autowired
     private ResearcherRepository researcherRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public ResponseDto registerResearcher(ResearcherRegDto researcherRegDto) {
@@ -41,7 +46,9 @@ public class ResearcherServiceImpl implements ResearcherService {
                     .role(Role.ROLE_RESEARCHER)
                     .build();
             researcherRepository.save(researcher);
-            //ToDo: send verification email
+            //ToDo: create verification url
+            EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(researcherRegDto.getFirstName(), "tempsite.org");
+            emailService.sendEmail(researcherRegDto.getEmail(), emailParamDto);
             log.info(CommonMessages.RESEARCHER_SAVED);
             return ResponseDto.builder().
                     message(CommonMessages.RESEARCHER_SAVED).

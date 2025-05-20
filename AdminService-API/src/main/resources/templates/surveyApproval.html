@@ -69,12 +69,9 @@
     </div>
     <div class="email-body">
         <h2>Hello, <span th:text="${userName}">User</span>!</h2>
-        <p>
-            Thank you for registering on ResearchBucks. Please click the button below to verify your account.
+        <p th:text="${approvalMessage}">
+            Text Here
         </p>
-        <div style="text-align: center;">
-            <a class="verify-button" th:href="${verificationUrl}">Verify Email</a>
-        </div>
     </div>
     <div class="email-footer">
         &copy; <span th:text="${year}">2025</span> Team ResearchBucks. All rights reserved.

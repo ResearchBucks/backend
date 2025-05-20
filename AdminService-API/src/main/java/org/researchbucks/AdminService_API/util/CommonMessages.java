@@ -45,4 +45,13 @@ public class CommonMessages {
     public static final String LOGOUT = "User logged out successfully";
     public static final String ALGO_EXEPTION = "SHA-256 algorithm not available";
     public static final String LOGIN_MARKED = "Last login recorded";
+    public static final String USERNAME = "userName";
+    public static final String YEAR = "year";
+    public static final String APPROVE_MSG = "approvalMessage";
+    public static final String EMAIL_SUB_APPROVE = "Survey Approved";
+    public static final String EMAIL_SUB_REJECT = "Survey Rejected";
+    public static final String EMAIL_B_APPROVE = "Congratulations!!! Your survey approved. You can view responses from your dashboard.";
+    public static final String EMAIL_B_REJECT = "Your survey is rejected. Check more details from your dashboard.";
+    public static final String MAIL_QUEUED = "Mail queued";
+    public static final String EMAIL_SUB_REFUND = "Refund Approved";
 }

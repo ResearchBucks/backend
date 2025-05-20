@@ -37,4 +37,9 @@ public class CommonMessages {
     public static final String TOKEN_BLACKLIST = "Token is blacklisted";
     public static final String LOGOUT = "User logged out successfully";
     public static final String ALGO_EXEPTION = "SHA-256 algorithm not available";
+    public static final String USERNAME = "userName";
+    public static final String VERIFY_URL = "verificationUrl";
+    public static final String YEAR = "year";
+    public static final String EMAIL_SUB_ACTIVATE = "Verify Your Account";
+    public static final String MAIL_QUEUED = "Mail queued";
 }

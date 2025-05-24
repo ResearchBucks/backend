@@ -15,6 +15,4 @@ public interface UserService {
     ResponseDto updateRespondent(Long id, RespondentUpdateDto respondentUpdateDto);
 
     ResponseDto deleteRespondent(Long id);
-
-    ResponseDto verifyRespondent(UserRegDto userRegDto);
 }

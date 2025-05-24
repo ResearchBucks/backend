@@ -96,16 +96,4 @@ public class UserController {
                 userService.deleteRespondent(id)
         );
     }
-
-    /************************
-     Verify respondent after email verification
-     Return type: ResponseEntity
-     ************************/
-    @PostMapping("/verifyRespondent")
-    public ResponseEntity<ResponseDto> verifyRespondent(@RequestBody UserRegDto userRegDto){
-        return ResponseEntity.ok().body(
-                userService.verifyRespondent(userRegDto)
-        );
-    }
-
 }

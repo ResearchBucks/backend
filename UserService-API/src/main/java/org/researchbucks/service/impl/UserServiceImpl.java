@@ -13,6 +13,7 @@ import org.researchbucks.service.UserService;
 import org.researchbucks.util.CommonMessages;
 import org.researchbucks.util.EmailCreateUtil;
 import org.researchbucks.util.SecurityUtil;
+import org.researchbucks.util.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,11 +31,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public ResponseDto registerRespondent(UserRegDto userRegDto){
         try{
             Date date = new Date();
+            String verifyToken = jwtUtil.generateVerificationTokenFromUserName(userRegDto.getEmail());
             Respondent respondent = Respondent.builder()
                     .firstName(userRegDto.getFirstName())
                     .lastName(userRegDto.getLastName())
@@ -48,10 +52,10 @@ public class UserServiceImpl implements UserService {
                     .isDeleted(false)
                     .isLocked(false)
                     .role(Role.ROLE_RESPONDENT)
+                    .verificationToken(SecurityUtil.hashToken(verifyToken))
                     .build();
             userRepository.save(respondent);
-            //ToDo: create email verification link
-            EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(userRegDto.getFirstName(), "tempurl.org");
+            EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(userRegDto.getFirstName(), verifyToken);
             emailService.sendEmail(userRegDto.getEmail(), emailParamDto);
             log.info(CommonMessages.RESPONDENT_SAVED_SUCCESSFULLY);
             return ResponseDto.builder().
@@ -151,30 +155,6 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             log.error(e.getMessage());
             return  ResponseDto.builder()
-                    .message(e.getMessage())
-                    .status(CommonMessages.RESPONSE_DTO_FAILED)
-                    .build();
-        }
-    }
-
-    @Override
-    public ResponseDto verifyRespondent(UserRegDto userRegDto) {
-        try{
-            log.info(CommonMessages.GET_RESPONDENT);
-            Respondent respondent = userRepository.findByEmail(userRegDto.getEmail());
-            if(respondent.getIsDeleted() || respondent.getIsVerified()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
-            respondent.setPassword(SecurityUtil.hashPassword(userRegDto.getPassword()));
-            respondent.setIsVerified(true);
-            userRepository.save(respondent);
-            log.info(CommonMessages.VERIFIED);
-            return ResponseDto.builder()
-                    .message(CommonMessages.VERIFIED)
-                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
-                    .data(respondent)
-                    .build();
-        }catch (Exception e){
-            log.error(e.getMessage());
-            return ResponseDto.builder()
                     .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
                     .build();

@@ -32,7 +32,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests.requestMatchers("/respondent/auth/login").permitAll()
                         .requestMatchers("/respondent/user/register").permitAll()
-                        .requestMatchers("/respondent/user/verifyRespondent").permitAll()
+                        .requestMatchers("/respondent/auth/verifyRespondent").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

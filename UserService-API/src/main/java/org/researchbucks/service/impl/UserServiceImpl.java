@@ -160,4 +160,28 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
     }
+
+    @Override
+    public ResponseDto requestPasswordReset(String email) {
+        try{
+            log.info(CommonMessages.GET_RESPONDENT);
+            Respondent respondent = userRepository.findByEmail(email);
+            if(respondent.getIsDeleted() || !respondent.getIsVerified()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
+            String token = jwtUtil.generateResetTokenFromUserName(email);
+            respondent.setResetToken(SecurityUtil.hashToken(token));
+            userRepository.save(respondent);
+            EmailParamDto emailParamDto = EmailCreateUtil.createResetPasswordEmail(respondent.getFirstName(), token);
+            emailService.sendEmail(email, emailParamDto);
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESET_M_SENT)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .build();
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
 }

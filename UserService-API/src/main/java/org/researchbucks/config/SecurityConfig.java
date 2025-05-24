@@ -33,6 +33,8 @@ public class SecurityConfig {
                 authorizeRequests.requestMatchers("/respondent/auth/login").permitAll()
                         .requestMatchers("/respondent/user/register").permitAll()
                         .requestMatchers("/respondent/auth/verifyRespondent").permitAll()
+                        .requestMatchers("/respondent/auth/requestPasswordReset/**").permitAll()
+                        .requestMatchers("/respondent/auth/resetPassword").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

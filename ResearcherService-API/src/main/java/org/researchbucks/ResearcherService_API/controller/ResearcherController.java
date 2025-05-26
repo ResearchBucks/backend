@@ -44,17 +44,6 @@ public class ResearcherController {
     }
 
     /************************
-     Verify researcher after email verification
-     Return type: ResponseEntity
-     ************************/
-    @PostMapping("/verifyResearcher")
-    public ResponseEntity<ResponseDto> verifyResearcher(@RequestBody ResearcherRegDto researcherRegDto){
-        return ResponseEntity.ok().body(
-                researcherService.verifyResearcher(researcherRegDto)
-        );
-    }
-
-    /************************
      Retrieve all researchers
      Return type: ResponseEntity
      ************************/

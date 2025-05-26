@@ -8,8 +8,6 @@ public interface ResearcherService {
 
     ResponseDto registerResearcher(ResearcherRegDto researcherRegDto);
 
-    ResponseDto verifyResearcher(ResearcherRegDto researcherRegDto);
-
     ResponseDto getAllResearchers();
 
     ResponseDto getResearcherById(Long id);
@@ -17,4 +15,6 @@ public interface ResearcherService {
     ResponseDto updateResearcher(Long id, ResearcherUpdateDto researcherUpdateDto);
 
     ResponseDto deleteResearcher(Long id);
+
+    ResponseDto requestPasswordReset(String email);
 }

@@ -1,8 +1,14 @@
 package org.researchbucks.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.dto.PasswordResetDto;
 import org.researchbucks.dto.ResponseDto;
+import org.researchbucks.model.Respondent;
+import org.researchbucks.repository.UserRepository;
+import org.researchbucks.service.UserService;
 import org.researchbucks.util.CommonMessages;
+import org.researchbucks.util.SecurityUtil;
 import org.researchbucks.util.jwt.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/respondent/auth")
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -26,6 +33,10 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenRevokeService tokenRevokeService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     /************************
      Respondent login
@@ -88,5 +99,85 @@ public class AuthController {
                         .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                         .build()
         );
+    }
+
+    /************************
+     Verify respondent after email verification
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/verifyRespondent")
+    public ResponseEntity<ResponseDto> verifyRespondent(@RequestParam("token") String token){
+        try{
+            if(!jwtUtil.validateJwtToken(token)) throw new Exception(CommonMessages.INVALID_JWT);
+            log.info(CommonMessages.GET_RESPONDENT);
+            Respondent respondent = userRepository.findByEmail(jwtUtil.getUserNameFromJwtToken(token));
+            if(respondent.getIsDeleted() || respondent.getIsVerified() || respondent.getVerificationToken() == null) throw new Exception(CommonMessages.INVALID_RESPONDENT);
+            if(!respondent.getVerificationToken().equals(SecurityUtil.hashToken(token))) throw new Exception(CommonMessages.INVALID_JWT);
+            respondent.setIsVerified(true);
+            respondent.setVerificationToken(null);
+            userRepository.save(respondent);
+            log.info(CommonMessages.VERIFIED);
+            return ResponseEntity.ok().body(
+                    ResponseDto.builder()
+                            .message(CommonMessages.VERIFIED)
+                            .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                            .data(respondent.getId())
+                            .build()
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ResponseDto.builder()
+                            .message(e.getMessage())
+                            .status(CommonMessages.RESPONSE_DTO_FAILED)
+                            .build()
+            );
+        }
+    }
+
+    /************************
+     Send password reset email
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/requestPasswordReset/{email}")
+    public ResponseEntity<ResponseDto> requestPasswordReset(@PathVariable String email){
+        return ResponseEntity.ok().body(
+                userService.requestPasswordReset(email)
+        );
+    }
+
+    /************************
+     Validate password reset token
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/resetPassword")
+    public ResponseEntity<ResponseDto> resetPassword(@RequestBody PasswordResetDto passwordResetDto){
+        try{
+            if(!jwtUtil.validateJwtToken(passwordResetDto.getToken())) throw new Exception(CommonMessages.INVALID_JWT);
+            log.info(CommonMessages.GET_RESPONDENT);
+            Respondent respondent = userRepository.findByEmail(jwtUtil.getUserNameFromJwtToken(passwordResetDto.getToken()));
+            if(respondent.getIsDeleted() || !respondent.getIsVerified() || respondent.getResetToken() == null) throw new Exception(CommonMessages.INVALID_RESPONDENT);
+            if(!respondent.getResetToken().equals(SecurityUtil.hashToken(passwordResetDto.getToken()))) throw new Exception(CommonMessages.INVALID_JWT);
+            respondent.setResetToken(null);
+            respondent.setPassword(SecurityUtil.hashPassword(passwordResetDto.getPassword()));
+            userRepository.save(respondent);
+            long ttl = jwtUtil.getTTL(passwordResetDto.getToken());
+            tokenRevokeService.blacklistToken(passwordResetDto.getToken(), ttl);
+            log.info(CommonMessages.PASS_R_SUCCESS);
+            return ResponseEntity.ok().body(
+                    ResponseDto.builder()
+                            .message(CommonMessages.PASS_R_SUCCESS)
+                            .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                            .build()
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ResponseDto.builder()
+                            .message(e.getMessage())
+                            .status(CommonMessages.RESPONSE_DTO_FAILED)
+                            .build()
+            );
+        }
     }
 }

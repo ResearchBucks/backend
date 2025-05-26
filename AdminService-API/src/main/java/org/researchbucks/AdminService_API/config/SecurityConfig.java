@@ -33,6 +33,8 @@ public class SecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests.requestMatchers("/admin/auth/login").permitAll()
+                        .requestMatchers("/admin/auth/requestPasswordReset/**").permitAll()
+                        .requestMatchers("/admin/auth/resetPassword").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

@@ -42,4 +42,7 @@ public class CommonMessages {
     public static final String YEAR = "year";
     public static final String EMAIL_SUB_ACTIVATE = "Verify Your Account";
     public static final String MAIL_QUEUED = "Mail queued";
+    public static final String EMAIL_SUB_RESET = "Reset Password";
+    public static final String RESET_M_SENT = "Password reset mail sent";
+    public static final String PASS_R_SUCCESS = "Password reset successful";
 }

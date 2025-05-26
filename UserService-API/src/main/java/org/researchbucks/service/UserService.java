@@ -16,5 +16,5 @@ public interface UserService {
 
     ResponseDto deleteRespondent(Long id);
 
-    ResponseDto verifyRespondent(UserRegDto userRegDto);
+    ResponseDto requestPasswordReset(String email);
 }

@@ -66,6 +66,14 @@ public class Respondent implements Serializable {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    @JsonIgnore
+    @Column(name="verify_token")
+    private String verificationToken;
+
+    @JsonIgnore
+    @Column(name="reset_token")
+    private String resetToken;
+
     @JsonManagedReference
     @ToString.Exclude
     @ManyToMany(mappedBy = "respondents")

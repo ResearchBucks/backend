@@ -3,13 +3,17 @@ package org.researchbucks.AdminService_API.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.researchbucks.AdminService_API.dto.AdminRegDto;
 import org.researchbucks.AdminService_API.dto.AdminUpdateDto;
+import org.researchbucks.AdminService_API.dto.EmailParamDto;
 import org.researchbucks.AdminService_API.dto.ResponseDto;
 import org.researchbucks.AdminService_API.enums.AdminRole;
 import org.researchbucks.AdminService_API.model.Admin;
 import org.researchbucks.AdminService_API.repository.AdminRepository;
 import org.researchbucks.AdminService_API.service.AdminService;
+import org.researchbucks.AdminService_API.service.EmailService;
 import org.researchbucks.AdminService_API.util.CommonMessages;
+import org.researchbucks.AdminService_API.util.EmailCreateUtil;
 import org.researchbucks.AdminService_API.util.SecurityUtil;
+import org.researchbucks.AdminService_API.util.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public ResponseDto createAdmin(AdminRegDto adminRegDto) {
@@ -174,6 +182,30 @@ public class AdminServiceImpl implements AdminService {
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ResponseDto requestPasswordReset(String email) {
+        try{
+            log.info(CommonMessages.GET_ADMIN);
+            Admin admin = adminRepository.findByEmail(email);
+            if(admin.getIsDeleted()) throw new Exception(CommonMessages.INVALID_ADMIN);
+            String token = jwtUtil.generateResetTokenFromUserName(email);
+            admin.setResetToken(SecurityUtil.hashToken(token));
+            adminRepository.save(admin);
+            EmailParamDto emailParamDto = EmailCreateUtil.createResetPasswordEmail(admin.getFirstName(), token);
+            emailService.sendEmail(email, emailParamDto);
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESET_M_SENT)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .build();
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
         }
     }
 }

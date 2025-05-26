@@ -24,7 +24,7 @@ public class EmailCreateUtil {
     }
 
     public static EmailParamDto createResetPasswordEmail(String username, String token){
-        String path = "/respondent/auth/resetPassword";
+        String path = "/researcher/auth/resetPassword";
         String resetUrl = generateUrl(path, token);
         Map<String, Object> properties = new HashMap<>();
         properties.put(CommonMessages.USERNAME, username);

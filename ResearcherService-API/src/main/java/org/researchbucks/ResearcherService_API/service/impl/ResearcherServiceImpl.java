@@ -51,7 +51,6 @@ public class ResearcherServiceImpl implements ResearcherService {
                     .verificationToken(SecurityUtil.hashToken(verifyToken))
                     .build();
             researcherRepository.save(researcher);
-            //ToDo: create verification url
             EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(researcherRegDto.getFirstName(), verifyToken);
             emailService.sendEmail(researcherRegDto.getEmail(), emailParamDto);
             log.info(CommonMessages.RESEARCHER_SAVED);

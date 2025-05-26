@@ -2,9 +2,11 @@ package org.researchbucks.ResearcherService_API.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.researchbucks.ResearcherService_API.dto.PasswordResetDto;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
 import org.researchbucks.ResearcherService_API.model.Researcher;
 import org.researchbucks.ResearcherService_API.repository.ResearcherRepository;
+import org.researchbucks.ResearcherService_API.service.ResearcherService;
 import org.researchbucks.ResearcherService_API.util.CommonMessages;
 import org.researchbucks.ResearcherService_API.util.SecurityUtil;
 import org.researchbucks.ResearcherService_API.util.jwt.*;
@@ -33,6 +35,8 @@ public class AuthController {
     private TokenRevokeService tokenRevokeService;
     @Autowired
     private ResearcherRepository researcherRepository;
+    @Autowired
+    private ResearcherService researcherService;
 
     /************************
      Researcher login
@@ -101,7 +105,7 @@ public class AuthController {
      Verify researcher after email verification
      Return type: ResponseEntity
      ************************/
-    @GetMapping("/verifyResearcher")
+    @PostMapping("/verifyResearcher")
     public ResponseEntity<ResponseDto> verifyResearcher(@RequestParam("token") String token){
         try{
             if(!jwtUtil.validateJwtToken(token)) throw new Exception(CommonMessages.INVALID_JWT);
@@ -118,6 +122,52 @@ public class AuthController {
                             .message(CommonMessages.VERIFIED)
                             .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                             .data(researcher.getId())
+                            .build()
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ResponseDto.builder()
+                            .message(e.getMessage())
+                            .status(CommonMessages.RESPONSE_DTO_FAILED)
+                            .build()
+            );
+        }
+    }
+
+    /************************
+     Send password reset email
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/requestPasswordReset/{email}")
+    public ResponseEntity<ResponseDto> requestPasswordReset(@PathVariable String email){
+        return ResponseEntity.ok().body(
+                researcherService.requestPasswordReset(email)
+        );
+    }
+
+    /************************
+     Validate password reset token
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/resetPassword")
+    public ResponseEntity<ResponseDto> resetPassword(@RequestBody PasswordResetDto passwordResetDto){
+        try{
+            if(!jwtUtil.validateJwtToken(passwordResetDto.getToken())) throw new Exception(CommonMessages.INVALID_JWT);
+            log.info(CommonMessages.GET_RESEARCHER);
+            Researcher researcher = researcherRepository.findResearcherByEmail(jwtUtil.getUserNameFromJwtToken(passwordResetDto.getToken()));
+            if(researcher.getIsDeleted() || !researcher.getIsVerified() || researcher.getResetToken() == null) throw new Exception(CommonMessages.INVALID_RESEARCHER);
+            if(!researcher.getResetToken().equals(SecurityUtil.hashToken(passwordResetDto.getToken()))) throw new Exception(CommonMessages.INVALID_JWT);
+            researcher.setResetToken(null);
+            researcher.setPassword(SecurityUtil.hashPassword(passwordResetDto.getPassword()));
+            researcherRepository.save(researcher);
+            long ttl = jwtUtil.getTTL(passwordResetDto.getToken());
+            tokenRevokeService.blacklistToken(passwordResetDto.getToken(), ttl);
+            log.info(CommonMessages.PASS_R_SUCCESS);
+            return ResponseEntity.ok().body(
+                    ResponseDto.builder()
+                            .message(CommonMessages.PASS_R_SUCCESS)
+                            .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                             .build()
             );
         } catch (Exception e) {

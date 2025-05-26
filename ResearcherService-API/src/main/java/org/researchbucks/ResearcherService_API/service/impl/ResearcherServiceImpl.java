@@ -158,4 +158,28 @@ public class ResearcherServiceImpl implements ResearcherService {
                     .build();
         }
     }
+
+    @Override
+    public ResponseDto requestPasswordReset(String email) {
+        try{
+            log.info(CommonMessages.GET_RESEARCHER);
+            Researcher researcher = researcherRepository.findResearcherByEmail(email);
+            if(researcher.getIsDeleted() || !researcher.getIsVerified()) throw new Exception(CommonMessages.INVALID_RESEARCHER);
+            String token = jwtUtil.generateResetTokenFromUserName(email);
+            researcher.setResetToken(SecurityUtil.hashToken(token));
+            researcherRepository.save(researcher);
+            EmailParamDto emailParamDto = EmailCreateUtil.createResetPasswordEmail(researcher.getFirstName(), token);
+            emailService.sendEmail(email, emailParamDto);
+            return ResponseDto.builder()
+                    .message(CommonMessages.RESET_M_SENT)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .build();
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
 }

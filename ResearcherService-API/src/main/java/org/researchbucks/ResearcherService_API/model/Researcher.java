@@ -65,6 +65,14 @@ public class Researcher implements Serializable {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    @JsonIgnore
+    @Column(name="verify_token")
+    private String verificationToken;
+
+    @JsonIgnore
+    @Column(name="reset_token")
+    private String resetToken;
+
     @ToString.Exclude
     @JsonIgnore
     @OneToMany(mappedBy = "researcher", orphanRemoval = true)

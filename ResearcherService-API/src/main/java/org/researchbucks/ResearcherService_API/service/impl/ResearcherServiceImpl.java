@@ -13,6 +13,7 @@ import org.researchbucks.ResearcherService_API.service.ResearcherService;
 import org.researchbucks.ResearcherService_API.util.CommonMessages;
 import org.researchbucks.ResearcherService_API.util.EmailCreateUtil;
 import org.researchbucks.ResearcherService_API.util.SecurityUtil;
+import org.researchbucks.ResearcherService_API.util.jwt.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,14 @@ public class ResearcherServiceImpl implements ResearcherService {
     private ResearcherRepository researcherRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public ResponseDto registerResearcher(ResearcherRegDto researcherRegDto) {
         try{
             Date date = new Date();
+            String verifyToken = jwtUtil.generateVerificationTokenFromUserName(researcherRegDto.getEmail());
             Researcher researcher = Researcher.builder()
                     .firstName(researcherRegDto.getFirstName())
                     .lastName(researcherRegDto.getLastName())
@@ -44,10 +48,11 @@ public class ResearcherServiceImpl implements ResearcherService {
                     .isDeleted(false)
                     .isLocked(false)
                     .role(Role.ROLE_RESEARCHER)
+                    .verificationToken(SecurityUtil.hashToken(verifyToken))
                     .build();
             researcherRepository.save(researcher);
             //ToDo: create verification url
-            EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(researcherRegDto.getFirstName(), "tempsite.org");
+            EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(researcherRegDto.getFirstName(), verifyToken);
             emailService.sendEmail(researcherRegDto.getEmail(), emailParamDto);
             log.info(CommonMessages.RESEARCHER_SAVED);
             return ResponseDto.builder().
@@ -57,30 +62,6 @@ public class ResearcherServiceImpl implements ResearcherService {
         } catch (Exception e) {
             log.error(e.getMessage());
             return  ResponseDto.builder()
-                    .message(e.getMessage())
-                    .status(CommonMessages.RESPONSE_DTO_FAILED)
-                    .build();
-        }
-    }
-
-    @Override
-    public ResponseDto verifyResearcher(ResearcherRegDto researcherRegDto) {
-        try{
-            log.info(CommonMessages.GET_RESEARCHER);
-            Researcher researcher = researcherRepository.findResearcherByEmail(researcherRegDto.getEmail());
-            if(researcher.getIsDeleted() || researcher.getIsVerified()) throw new Exception(CommonMessages.INVALID_RESEARCHER);
-            researcher.setPassword(SecurityUtil.hashPassword(researcherRegDto.getPassword()));
-            researcher.setIsVerified(true);
-            researcherRepository.save(researcher);
-            log.info(CommonMessages.VERIFIED);
-            return ResponseDto.builder()
-                    .message(CommonMessages.VERIFIED)
-                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
-                    .data(researcher)
-                    .build();
-        }catch (Exception e){
-            log.error(e.getMessage());
-            return ResponseDto.builder()
                     .message(e.getMessage())
                     .status(CommonMessages.RESPONSE_DTO_FAILED)
                     .build();

@@ -8,8 +8,6 @@ public interface ResearcherService {
 
     ResponseDto registerResearcher(ResearcherRegDto researcherRegDto);
 
-    ResponseDto verifyResearcher(ResearcherRegDto researcherRegDto);
-
     ResponseDto getAllResearchers();
 
     ResponseDto getResearcherById(Long id);

@@ -1,8 +1,12 @@
 package org.researchbucks.ResearcherService_API.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.researchbucks.ResearcherService_API.dto.ResponseDto;
+import org.researchbucks.ResearcherService_API.model.Researcher;
+import org.researchbucks.ResearcherService_API.repository.ResearcherRepository;
 import org.researchbucks.ResearcherService_API.util.CommonMessages;
+import org.researchbucks.ResearcherService_API.util.SecurityUtil;
 import org.researchbucks.ResearcherService_API.util.jwt.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,16 +15,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/researcher/auth")
+@Slf4j
 public class AuthController {
 
     @Autowired
@@ -29,6 +31,8 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenRevokeService tokenRevokeService;
+    @Autowired
+    private ResearcherRepository researcherRepository;
 
     /************************
      Researcher login
@@ -91,5 +95,39 @@ public class AuthController {
                         .status(CommonMessages.RESPONSE_DTO_SUCCESS)
                         .build()
         );
+    }
+
+    /************************
+     Verify researcher after email verification
+     Return type: ResponseEntity
+     ************************/
+    @GetMapping("/verifyResearcher")
+    public ResponseEntity<ResponseDto> verifyResearcher(@RequestParam("token") String token){
+        try{
+            if(!jwtUtil.validateJwtToken(token)) throw new Exception(CommonMessages.INVALID_JWT);
+            log.info(CommonMessages.GET_RESEARCHER);
+            Researcher researcher = researcherRepository.findResearcherByEmail(jwtUtil.getUserNameFromJwtToken(token));
+            if(researcher.getIsDeleted() || researcher.getIsVerified() || researcher.getVerificationToken() == null) throw new Exception(CommonMessages.INVALID_RESEARCHER);
+            if(!researcher.getVerificationToken().equals(SecurityUtil.hashToken(token))) throw new Exception(CommonMessages.INVALID_JWT);
+            researcher.setIsVerified(true);
+            researcher.setVerificationToken(null);
+            researcherRepository.save(researcher);
+            log.info(CommonMessages.VERIFIED);
+            return ResponseEntity.ok().body(
+                    ResponseDto.builder()
+                            .message(CommonMessages.VERIFIED)
+                            .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                            .data(researcher.getId())
+                            .build()
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ResponseDto.builder()
+                            .message(e.getMessage())
+                            .status(CommonMessages.RESPONSE_DTO_FAILED)
+                            .build()
+            );
+        }
     }
 }

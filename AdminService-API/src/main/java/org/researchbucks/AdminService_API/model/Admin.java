@@ -54,4 +54,8 @@ public class Admin implements Serializable {
 
     @Column(name = "role", nullable = false)
     private AdminRole role;
+
+    @JsonIgnore
+    @Column(name="reset_token")
+    private String resetToken;
 }

@@ -19,4 +19,6 @@ public interface AdminService {
     ResponseDto changeAdminRole(Long adminId);
 
     void markLastLogin(String email);
+
+    ResponseDto requestPasswordReset(String email);
 }

@@ -37,6 +37,7 @@ public class Survey implements Serializable {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)
     private PaymentStatus paymentStatus;
 

@@ -65,6 +65,7 @@ public class Respondent implements Serializable {
     @Column(name = "is_locked")
     private Boolean isLocked;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
 

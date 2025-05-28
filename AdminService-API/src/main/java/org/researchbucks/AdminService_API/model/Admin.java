@@ -52,6 +52,7 @@ public class Admin implements Serializable {
     @Column(name = "last_login")
     private Date lastLogin;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private AdminRole role;
 

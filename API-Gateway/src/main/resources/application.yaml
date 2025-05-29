@@ -3,20 +3,32 @@ spring:
     name: api-gateway
   cloud:
     gateway:
-      mvc:
-        routes:
-          - id: user-service
-            uri: lb://user-service
-            predicates:
-              - Path=/respondent/**
-          - id: researcher-service
-            uri: lb://researcher-service
-            predicates:
-              - Path=/researcher/**
-          - id: admin-service
-            uri: lb://admin-service
-            predicates:
-              - Path=/admin/**
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/respondent/**
+        - id: researcher-service
+          uri: lb://researcher-service
+          predicates:
+            - Path=/researcher/**
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://${ui-client.hostname}:${ui-client.port}"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+
 server:
   port: 8060
 
@@ -25,3 +37,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+#frontend configurations
+ui-client:
+  hostname: localhost
+  port: 3000

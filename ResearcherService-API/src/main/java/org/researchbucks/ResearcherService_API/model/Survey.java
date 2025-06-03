@@ -59,6 +59,9 @@ public class Survey implements Serializable {
     @Column(name = "approved_date")
     private Date approvedDate;
 
+    @Column(name = "description")
+    private String description;
+
     @JsonIgnore
     @ToString.Exclude
     @ManyToOne

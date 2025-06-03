@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SurveyQuestionDto {
+public class QuestionOptionDto {
 
-    private Integer questionId;
-    private QuestionDetailsDto questionDetails;
-
+    private String id;
+    private String text;
+    private String sinhalaText;
 }

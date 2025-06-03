@@ -9,4 +9,5 @@
 
     <include file="/db/changelog/scripts.sql"></include>
     <include file="/db/changelog/master_data.sql"></include>
+    <include file="/db/changelog/update_1.0.0.0.sql"></include>
 </databaseChangeLog>

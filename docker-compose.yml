@@ -1,0 +1,55 @@
+version: '3.3'
+
+services:
+  service-registry:
+    build: ./Service-Registry
+    container_name: service-registry
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    build: ./API-Gateway
+    container_name: api-gateway
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - "8060:8060"
+    depends_on:
+      - service-registry
+      - admin-service
+      - user-service
+      - researcher-service
+
+  admin-service:
+    build: ./AdminService-API
+    container_name: admin-service
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - "8091:8091"
+    depends_on:
+      - service-registry
+
+  researcher-service:
+    build: ./ResearcherService-API
+    container_name: researcher-service
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - "8081:8081"
+    depends_on:
+      - service-registry
+      - admin-service
+
+  user-service:
+    build: ./UserService-API
+    container_name: user-service
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - service-registry
+      - admin-service

@@ -28,6 +28,14 @@ jobs:
             git pull origin dev
             git checkout dev
 
+            echo "Building all Java services..."
+            for d in Service-Registry API-Gateway AdminService-API ResearcherService-API UserService-API; do
+              echo "Building $d..."
+              cd $d
+              mvn -B -ntp clean package -DskipTests
+              cd ..
+            done
+
             echo "Stopping existing containers..."
             docker-compose down
 

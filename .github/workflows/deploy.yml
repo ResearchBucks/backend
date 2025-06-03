@@ -29,10 +29,10 @@ jobs:
             git checkout dev
 
             echo "Stopping existing containers..."
-            docker compose down
+            docker-compose down
 
             echo "Building and starting new containers..."
-            docker compose up --build -d
+            docker-compose up --build -d
 
             echo "Cleaning up old images..."
             docker image prune -f

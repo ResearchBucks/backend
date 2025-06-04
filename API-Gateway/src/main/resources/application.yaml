@@ -19,7 +19,8 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://${ui-client.hostname}:${ui-client.port}"
+#            allowedOrigins: "http://${ui-client.hostname}:${ui-client.port}"
+            allowedOrigins: "*"
             allowedMethods:
               - GET
               - POST
@@ -27,7 +28,8 @@ spring:
               - DELETE
               - OPTIONS
             allowedHeaders: "*"
-            allowCredentials: true
+#            allowCredentials: true
+            allowCredentials: false
 
 server:
   port: 8060

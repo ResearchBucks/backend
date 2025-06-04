@@ -15,6 +15,7 @@ import java.util.List;
 public class SurveyDto implements Serializable {
 
     private String title;
+    private String description;
     private Integer paymentPerUser;
     private Integer surveyPrice;
     private Date expiringDate;

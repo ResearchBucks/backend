@@ -16,6 +16,7 @@ import org.researchbucks.ResearcherService_API.util.CommonMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,7 @@ public class SurveyServiceImpl implements SurveyService {
                     .researcher(researcher)
                     .paymentPerUser(surveyDto.getPaymentPerUser())
                     .surveyPrice(surveyDto.getSurveyPrice())
+                    .description(surveyDto.getDescription())
                     .build();
             if(surveyDto.getPaymentStatus().equals(PaymentStatus.FAILED)){
                 survey.setRemainingAmountToPay(survey.getSurveyPrice());
@@ -68,7 +70,7 @@ public class SurveyServiceImpl implements SurveyService {
             surveyQuestionRepository.save(SurveyQuestion.builder()
                     .surveyId(survey.getId())
                     .researcherId(researcherId)
-                    .questions(surveyDto.getSurveyQuestionList().stream().collect(Collectors.toMap(SurveyQuestionDto::getQuestionId, SurveyQuestionDto::getQuestion)))
+                    .questions(surveyDto.getSurveyQuestionList().stream().collect(Collectors.toMap(SurveyQuestionDto::getQuestionId, SurveyQuestionDto::getQuestionDetails)))
                     .build());
             log.info(CommonMessages.SURVEY_Q_SAVED);
             return ResponseDto.builder()
@@ -137,12 +139,13 @@ public class SurveyServiceImpl implements SurveyService {
             if(surveyDto.getTitle() != null) survey.setTitle(surveyDto.getTitle());
             if(surveyDto.getPaymentPerUser() != null) survey.setPaymentPerUser(surveyDto.getPaymentPerUser());
             if(surveyDto.getExpiringDate() != null) survey.setExpiringDate(surveyDto.getExpiringDate());
+            if(surveyDto.getDescription() != null) survey.setDescription(surveyDto.getDescription());
             survey.setLastEditedDate(new Date());
             survey.setIsVerified(false);
             surveyRepository.save(survey);
             if(surveyDto.getSurveyQuestionList() != null){
                 SurveyQuestion surveyQuestion = surveyQuestionRepository.getBySurveyId(surveyId);
-                surveyQuestion.setQuestions(surveyDto.getSurveyQuestionList().stream().collect(Collectors.toMap(SurveyQuestionDto::getQuestionId, SurveyQuestionDto::getQuestion)));
+                surveyQuestion.setQuestions(surveyDto.getSurveyQuestionList().stream().collect(Collectors.toMap(SurveyQuestionDto::getQuestionId, SurveyQuestionDto::getQuestionDetails)));
                 surveyQuestionRepository.save(surveyQuestion);
             }
             log.info(CommonMessages.SURVEY_UPDATED);

@@ -139,6 +139,7 @@ public class SurveyServiceImpl implements SurveyService {
             if(surveyDto.getTitle() != null) survey.setTitle(surveyDto.getTitle());
             if(surveyDto.getPaymentPerUser() != null) survey.setPaymentPerUser(surveyDto.getPaymentPerUser());
             if(surveyDto.getExpiringDate() != null) survey.setExpiringDate(surveyDto.getExpiringDate());
+            if(surveyDto.getDescription() != null) survey.setDescription(surveyDto.getDescription());
             survey.setLastEditedDate(new Date());
             survey.setIsVerified(false);
             surveyRepository.save(survey);

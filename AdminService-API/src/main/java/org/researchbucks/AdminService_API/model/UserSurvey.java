@@ -31,6 +31,18 @@ public class UserSurvey implements Serializable {
     @Column(name = "paid_to_respondents", nullable = false)
     private Boolean isPaidToRespondents;
 
+    @Column(name = "is_verified")
+    private Boolean isVerified;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "payment_per_user")
+    private Integer paymentPerUser;
+
     @JsonBackReference
     @ToString.Exclude
     @ManyToMany

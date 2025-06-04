@@ -7,6 +7,7 @@ import org.researchbucks.AdminService_API.enums.PaymentStatus;
 import org.researchbucks.AdminService_API.model.Survey;
 import org.researchbucks.AdminService_API.repository.SurveyQuestionRepository;
 import org.researchbucks.AdminService_API.repository.SurveyRepository;
+import org.researchbucks.AdminService_API.repository.UserSurveyRepository;
 import org.researchbucks.AdminService_API.service.EmailService;
 import org.researchbucks.AdminService_API.service.SurveyService;
 import org.researchbucks.AdminService_API.util.CommonMessages;
@@ -26,6 +27,8 @@ public class SurveyServiceImpl implements SurveyService {
     private SurveyQuestionRepository surveyQuestionRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private UserSurveyRepository userSurveyRepository;
 
     @Override
     public ResponseDto getAllSurveys() {
@@ -76,6 +79,7 @@ public class SurveyServiceImpl implements SurveyService {
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
             if(survey.getIsVerified()) throw new Exception(CommonMessages.APPROVED_SURVEY);
             surveyRepository.approveSurvey(true, new Date(),surveyId);
+            userSurveyRepository.approveSurvey(true, surveyId);
             log.info(CommonMessages.SURVEY_APPROVED);
             EmailParamDto emailParamDto = EmailCreateUtil.createSurveyApprovalEmail(survey.getResearcher().getFirstName(),
                     CommonMessages.EMAIL_B_APPROVE, CommonMessages.EMAIL_SUB_APPROVE);

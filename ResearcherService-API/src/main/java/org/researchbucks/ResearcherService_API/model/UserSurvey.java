@@ -39,4 +39,7 @@ public class UserSurvey implements Serializable {
 
     @Column(name = "payment_per_user")
     private Integer paymentPerUser;
+
+    @Column(name = "is_rejected")
+    private Boolean isRejected;
 }

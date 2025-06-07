@@ -62,6 +62,9 @@ public class Survey implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "is_rejected")
+    private Boolean isRejected;
+
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "created_by")

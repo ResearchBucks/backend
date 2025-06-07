@@ -28,4 +28,9 @@ public interface SurveyRepository extends JpaRepository<Survey, Long> {
 
     @Query("SELECT s.paymentPerUser FROM Survey s WHERE s.id = ?1")
     Integer findPaymentPerUserById(Long id);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Survey s SET s.isRejected = ?1 WHERE s.id = ?2")
+    void rejectSurvey(Boolean isRejected, Long surveyId);
 }

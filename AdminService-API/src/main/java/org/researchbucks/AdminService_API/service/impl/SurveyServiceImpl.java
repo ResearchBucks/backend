@@ -5,6 +5,7 @@ import org.researchbucks.AdminService_API.dto.EmailParamDto;
 import org.researchbucks.AdminService_API.dto.ResponseDto;
 import org.researchbucks.AdminService_API.enums.PaymentStatus;
 import org.researchbucks.AdminService_API.model.Survey;
+import org.researchbucks.AdminService_API.model.UserSurvey;
 import org.researchbucks.AdminService_API.repository.SurveyQuestionRepository;
 import org.researchbucks.AdminService_API.repository.SurveyRepository;
 import org.researchbucks.AdminService_API.repository.UserSurveyRepository;
@@ -79,7 +80,9 @@ public class SurveyServiceImpl implements SurveyService {
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
             if(survey.getIsVerified()) throw new Exception(CommonMessages.APPROVED_SURVEY);
             surveyRepository.approveSurvey(true, new Date(),surveyId);
+            surveyRepository.rejectSurvey(false, surveyId);
             userSurveyRepository.approveSurvey(true, surveyId);
+            userSurveyRepository.rejectSurvey(false, surveyId);
             log.info(CommonMessages.SURVEY_APPROVED);
             EmailParamDto emailParamDto = EmailCreateUtil.createSurveyApprovalEmail(survey.getResearcher().getFirstName(),
                     CommonMessages.EMAIL_B_APPROVE, CommonMessages.EMAIL_SUB_APPROVE);
@@ -127,6 +130,11 @@ public class SurveyServiceImpl implements SurveyService {
             log.info(CommonMessages.GET_SURVEY);
             Survey survey = surveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted()) throw new Exception(CommonMessages.INVALID_SURVEY);
+            survey.setIsRejected(true);
+            surveyRepository.save(survey);
+            UserSurvey userSurvey = userSurveyRepository.findById(surveyId).get();
+            userSurvey.setIsRejected(true);
+            userSurveyRepository.save(userSurvey);
             EmailParamDto emailParamDto = EmailCreateUtil.createSurveyApprovalEmail(survey.getResearcher().getFirstName(),
                     CommonMessages.EMAIL_B_REJECT, CommonMessages.EMAIL_SUB_REJECT);
             emailService.sendEmail(survey.getResearcher().getEmail(), emailParamDto);

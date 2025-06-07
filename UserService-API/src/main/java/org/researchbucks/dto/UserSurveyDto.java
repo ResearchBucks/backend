@@ -4,16 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.researchbucks.model.UserSurvey;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SurveyAnswersDto {
+public class UserSurveyDto {
 
-    private Integer questionId;
-    private List<AnswerDto> answer;
+    private List<UserSurvey> answeredSurveys;
+    private List<UserSurvey> notAnsweredSurveys;
 }

@@ -64,6 +64,10 @@ public class SurveyServiceImpl implements SurveyService {
                             .expiredAt(survey.getExpiringDate())
                             .isDeleted(survey.getIsDeleted())
                             .isPaidToRespondents(false)
+                            .isVerified(false)
+                            .title(survey.getTitle())
+                            .description(survey.getDescription())
+                            .paymentPerUser(survey.getPaymentPerUser())
                             .build();
             userSurveyRepository.save(userSurvey);
             log.info(CommonMessages.SURVEY_SAVED);
@@ -135,14 +139,18 @@ public class SurveyServiceImpl implements SurveyService {
         try{
             log.info(CommonMessages.UPDATE_SURVEY);
             Survey survey = surveyRepository.findById(surveyId).get();
+            UserSurvey userSurvey = userSurveyRepository.findById(surveyId).get();
             if(survey.getIsDeleted() || !survey.getIsVerified()) throw new Exception(CommonMessages.INVALID_SURVEY);
-            if(surveyDto.getTitle() != null) survey.setTitle(surveyDto.getTitle());
-            if(surveyDto.getPaymentPerUser() != null) survey.setPaymentPerUser(surveyDto.getPaymentPerUser());
-            if(surveyDto.getExpiringDate() != null) survey.setExpiringDate(surveyDto.getExpiringDate());
-            if(surveyDto.getDescription() != null) survey.setDescription(surveyDto.getDescription());
+            if(surveyDto.getTitle() != null) {survey.setTitle(surveyDto.getTitle()); userSurvey.setTitle(surveyDto.getTitle());}
+            if(surveyDto.getDescription() != null) {survey.setDescription(surveyDto.getDescription()); userSurvey.setDescription(surveyDto.getDescription());}
+            if(surveyDto.getPaymentPerUser() != null) {survey.setPaymentPerUser(surveyDto.getPaymentPerUser()); userSurvey.setPaymentPerUser(surveyDto.getPaymentPerUser());}
+            if(surveyDto.getExpiringDate() != null) {survey.setExpiringDate(surveyDto.getExpiringDate()); userSurvey.setExpiredAt(surveyDto.getExpiringDate());}
+            if(surveyDto.getDescription() != null) {survey.setDescription(surveyDto.getDescription()); userSurvey.setDescription(surveyDto.getDescription());}
             survey.setLastEditedDate(new Date());
             survey.setIsVerified(false);
+            userSurvey.setIsVerified(false);
             surveyRepository.save(survey);
+            userSurveyRepository.save(userSurvey);
             if(surveyDto.getSurveyQuestionList() != null){
                 SurveyQuestion surveyQuestion = surveyQuestionRepository.getBySurveyId(surveyId);
                 surveyQuestion.setQuestions(surveyDto.getSurveyQuestionList().stream().collect(Collectors.toMap(SurveyQuestionDto::getQuestionId, SurveyQuestionDto::getQuestionDetails)));

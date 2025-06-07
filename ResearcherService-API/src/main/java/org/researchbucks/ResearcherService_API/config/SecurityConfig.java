@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/researcher/auth/verifyResearcher").permitAll()
                         .requestMatchers("/researcher/auth/requestPasswordReset/**").permitAll()
                         .requestMatchers("/researcher/auth/resetPassword").permitAll()
+                        .requestMatchers("/researcher/user/resendVerifyEmail/**").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

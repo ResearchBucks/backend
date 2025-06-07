@@ -50,4 +50,5 @@ public class CommonMessages {
     public static final String EMAIL_SUB_RESET = "Reset Password";
     public static final String RESET_M_SENT = "Password reset mail sent";
     public static final String PASS_R_SUCCESS = "Password reset successful";
+    public static final String VERIFY_M_SENT = "Verification email sent";
 }

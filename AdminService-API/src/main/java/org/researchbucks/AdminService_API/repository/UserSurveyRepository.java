@@ -16,4 +16,9 @@ public interface UserSurveyRepository extends JpaRepository<UserSurvey, Long> {
     @Transactional
     @Query("UPDATE UserSurvey s SET s.isVerified = ?1 WHERE s.id = ?2")
     void approveSurvey(Boolean isVerified, Long surveyId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE UserSurvey s SET s.isRejected = ?1 WHERE s.id = ?2")
+    void rejectSurvey(Boolean isRejected, Long surveyId);
 }

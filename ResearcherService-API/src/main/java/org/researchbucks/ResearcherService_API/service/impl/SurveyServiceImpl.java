@@ -51,6 +51,7 @@ public class SurveyServiceImpl implements SurveyService {
                     .paymentPerUser(surveyDto.getPaymentPerUser())
                     .surveyPrice(surveyDto.getSurveyPrice())
                     .description(surveyDto.getDescription())
+                    .isRejected(false)
                     .build();
             if(surveyDto.getPaymentStatus().equals(PaymentStatus.FAILED)){
                 survey.setRemainingAmountToPay(survey.getSurveyPrice());
@@ -68,6 +69,7 @@ public class SurveyServiceImpl implements SurveyService {
                             .title(survey.getTitle())
                             .description(survey.getDescription())
                             .paymentPerUser(survey.getPaymentPerUser())
+                            .isRejected(false)
                             .build();
             userSurveyRepository.save(userSurvey);
             log.info(CommonMessages.SURVEY_SAVED);

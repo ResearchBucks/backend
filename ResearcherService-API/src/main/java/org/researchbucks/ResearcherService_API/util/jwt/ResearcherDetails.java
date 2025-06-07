@@ -40,4 +40,6 @@ public class ResearcherDetails implements UserDetails {
     public boolean isEnabled() {
         return researcher.getIsVerified();
     }
+
+    public Long getUserId(){ return researcher.getId(); }
 }

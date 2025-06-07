@@ -73,6 +73,7 @@ public class AuthController {
         JwtAuthenticationResponse response = new JwtAuthenticationResponse().builder()
                 .token(jwtToken)
                 .email(adminDetails.getUsername())
+                .id(adminDetails.getId())
                 .roles(roles)
                 .build();
         return ResponseEntity.ok().body(

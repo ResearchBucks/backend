@@ -35,4 +35,6 @@ public class AdminDetails implements UserDetails {
     public boolean isEnabled() {
         return !admin.getIsDeleted();
     }
+
+    public Long getId(){ return admin.getId(); }
 }

@@ -108,6 +108,7 @@ public class UserController {
                     userService.resendVerifyEmail(email)
             );
         }else {
+            log.error(CommonMessages.INVALID_EMAIL);
             return ResponseEntity.badRequest().body(
                     ResponseDto.builder()
                             .message(CommonMessages.INVALID_EMAIL)

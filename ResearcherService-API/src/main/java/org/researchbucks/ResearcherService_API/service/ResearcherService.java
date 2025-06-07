@@ -17,4 +17,6 @@ public interface ResearcherService {
     ResponseDto deleteResearcher(Long id);
 
     ResponseDto requestPasswordReset(String email);
+
+    ResponseDto resendVerifyEmail(String email);
 }

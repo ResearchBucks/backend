@@ -181,4 +181,29 @@ public class ResearcherServiceImpl implements ResearcherService {
                     .build();
         }
     }
+
+    @Override
+    public ResponseDto resendVerifyEmail(String email) {
+        try{
+            String verifyToken = jwtUtil.generateVerificationTokenFromUserName(email);
+            Researcher researcher = researcherRepository.findResearcherByEmail(email);
+            if(researcher.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESEARCHER);
+            researcher.setVerificationToken(SecurityUtil.hashToken(verifyToken));
+            researcher.setIsVerified(false);
+            researcherRepository.save(researcher);
+            EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(researcher.getFirstName(), verifyToken);
+            emailService.sendEmail(email, emailParamDto);
+            log.info(CommonMessages.VERIFY_M_SENT);
+            return ResponseDto.builder()
+                    .message(CommonMessages.VERIFY_M_SENT)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
 }

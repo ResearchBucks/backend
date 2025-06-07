@@ -17,4 +17,6 @@ public interface UserService {
     ResponseDto deleteRespondent(Long id);
 
     ResponseDto requestPasswordReset(String email);
+
+    ResponseDto resendVerifyEmail(String email);
 }

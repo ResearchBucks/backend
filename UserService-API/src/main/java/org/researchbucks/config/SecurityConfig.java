@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/respondent/auth/verifyRespondent").permitAll()
                         .requestMatchers("/respondent/auth/requestPasswordReset/**").permitAll()
                         .requestMatchers("/respondent/auth/resetPassword").permitAll()
+                        .requestMatchers("/respondent/user/resendVerifyEmail/**").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

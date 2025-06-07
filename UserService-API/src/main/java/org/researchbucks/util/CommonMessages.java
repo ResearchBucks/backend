@@ -46,4 +46,5 @@ public class CommonMessages {
     public static final String RESET_M_SENT = "Password reset mail sent";
     public static final String PASS_R_SUCCESS = "Password reset successful";
     public static final String  GET_SURVEY_SUCCESS = "Surveys fetched successfully";
+    public static final String VERIFY_M_SENT = "Verification email sent";
 }

@@ -96,4 +96,24 @@ public class UserController {
                 userService.deleteRespondent(id)
         );
     }
+
+    /************************
+     Resend verification email
+     Return type: ResponseEntity
+     ************************/
+    @PostMapping("/resendVerifyEmail/{email}")
+    public ResponseEntity<ResponseDto> resendVerifyEmail(@PathVariable String email){
+        if(userRepository.existsRespondentByEmail(email)){
+            return ResponseEntity.ok().body(
+                    userService.resendVerifyEmail(email)
+            );
+        }else {
+            return ResponseEntity.badRequest().body(
+                    ResponseDto.builder()
+                            .message(CommonMessages.INVALID_EMAIL)
+                            .status(CommonMessages.RESPONSE_DTO_FAILED)
+                            .build()
+            );
+        }
+    }
 }

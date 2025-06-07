@@ -184,4 +184,29 @@ public class UserServiceImpl implements UserService {
                     .build();
         }
     }
+
+    @Override
+    public ResponseDto resendVerifyEmail(String email) {
+        try{
+            String verifyToken = jwtUtil.generateVerificationTokenFromUserName(email);
+            Respondent respondent = userRepository.findByEmail(email);
+            if(respondent.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
+            respondent.setVerificationToken(SecurityUtil.hashToken(verifyToken));
+            respondent.setIsVerified(false);
+            userRepository.save(respondent);
+            EmailParamDto emailParamDto = EmailCreateUtil.createVerificationEmail(respondent.getFirstName(), verifyToken);
+            emailService.sendEmail(email, emailParamDto);
+            log.info(CommonMessages.VERIFY_M_SENT);
+            return ResponseDto.builder()
+                    .message(CommonMessages.VERIFY_M_SENT)
+                    .status(CommonMessages.RESPONSE_DTO_SUCCESS)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseDto.builder()
+                    .message(e.getMessage())
+                    .status(CommonMessages.RESPONSE_DTO_FAILED)
+                    .build();
+        }
+    }
 }

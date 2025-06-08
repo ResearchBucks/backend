@@ -107,14 +107,15 @@ public class AuthController {
      Return type: ResponseEntity
      ************************/
     @PostMapping("/verifyResearcher")
-    public ResponseEntity<ResponseDto> verifyResearcher(@RequestParam("token") String token){
+    public ResponseEntity<ResponseDto> verifyResearcher(@RequestBody PasswordResetDto passwordResetDto){
         try{
-            if(!jwtUtil.validateJwtToken(token)) throw new Exception(CommonMessages.INVALID_JWT);
+            if(!jwtUtil.validateJwtToken(passwordResetDto.getToken())) throw new Exception(CommonMessages.INVALID_JWT);
             log.info(CommonMessages.GET_RESEARCHER);
-            Researcher researcher = researcherRepository.findResearcherByEmail(jwtUtil.getUserNameFromJwtToken(token));
+            Researcher researcher = researcherRepository.findResearcherByEmail(jwtUtil.getUserNameFromJwtToken(passwordResetDto.getToken()));
             if(researcher.getIsDeleted() || researcher.getIsVerified() || researcher.getVerificationToken() == null) throw new Exception(CommonMessages.INVALID_RESEARCHER);
-            if(!researcher.getVerificationToken().equals(SecurityUtil.hashToken(token))) throw new Exception(CommonMessages.INVALID_JWT);
+            if(!researcher.getVerificationToken().equals(SecurityUtil.hashToken(passwordResetDto.getToken()))) throw new Exception(CommonMessages.INVALID_JWT);
             researcher.setIsVerified(true);
+            researcher.setPassword(SecurityUtil.hashPassword(passwordResetDto.getPassword()));
             researcher.setVerificationToken(null);
             researcherRepository.save(researcher);
             log.info(CommonMessages.VERIFIED);

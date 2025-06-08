@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ResearcherUpdateDto implements Serializable {
 
+    private String firstName;
+    private String lastName;
     private String mobile;
     private String password;
     private String address;

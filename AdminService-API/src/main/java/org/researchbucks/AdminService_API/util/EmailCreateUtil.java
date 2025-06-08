@@ -1,6 +1,7 @@
 package org.researchbucks.AdminService_API.util;
 
 import org.researchbucks.AdminService_API.dto.EmailParamDto;
+import org.researchbucks.AdminService_API.enums.AdminRole;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
@@ -32,9 +33,9 @@ public class EmailCreateUtil {
                 .build();
     }
 
-    public static EmailParamDto createResetPasswordEmail(String username, String token){
+    public static EmailParamDto createResetPasswordEmail(String username, String token, AdminRole role){
         String path = "/admin/auth/resetPassword";
-        String resetUrl = generateUrl(path, token);
+        String resetUrl = generateUrl(path, token, role);
         Map<String, Object> properties = new HashMap<>();
         properties.put(CommonMessages.USERNAME, username);
         properties.put(CommonMessages.VERIFY_URL, resetUrl);
@@ -46,10 +47,11 @@ public class EmailCreateUtil {
                 .build();
     }
 
-    private static String generateUrl(String path, String token){
-        return UriComponentsBuilder.fromUriString("http://localhost:8091")
+    private static String generateUrl(String path, String token, AdminRole role){
+        return UriComponentsBuilder.fromUriString("http://20.121.120.231:80")
                 .path(path)
                 .queryParam("token", token)
+                .queryParam("role", role)
                 .build()
                 .toUriString();
     }

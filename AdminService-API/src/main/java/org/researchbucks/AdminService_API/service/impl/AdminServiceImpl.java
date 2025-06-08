@@ -194,7 +194,7 @@ public class AdminServiceImpl implements AdminService {
             String token = jwtUtil.generateResetTokenFromUserName(email);
             admin.setResetToken(SecurityUtil.hashToken(token));
             adminRepository.save(admin);
-            EmailParamDto emailParamDto = EmailCreateUtil.createResetPasswordEmail(admin.getFirstName(), token);
+            EmailParamDto emailParamDto = EmailCreateUtil.createResetPasswordEmail(admin.getFirstName(), token, admin.getRole());
             emailService.sendEmail(email, emailParamDto);
             return ResponseDto.builder()
                     .message(CommonMessages.RESET_M_SENT)

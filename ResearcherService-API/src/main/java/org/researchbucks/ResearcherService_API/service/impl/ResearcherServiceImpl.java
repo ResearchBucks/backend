@@ -115,6 +115,8 @@ public class ResearcherServiceImpl implements ResearcherService {
             log.info(CommonMessages.GET_RESEARCHER);
             Researcher researcher = researcherRepository.findById(id).get();
             if(researcher.getIsDeleted() || !researcher.getIsVerified()) throw new Exception(CommonMessages.INVALID_RESEARCHER);
+            if(researcherUpdateDto.getFirstName() != null) researcher.setFirstName(researcherUpdateDto.getFirstName());
+            if(researcherUpdateDto.getLastName() != null) researcher.setLastName(researcherUpdateDto.getLastName());
             if(researcherUpdateDto.getMobile() != null) researcher.setMobile(researcherUpdateDto.getMobile());
             if(researcherUpdateDto.getAddress() != null) researcher.setAddress(researcherUpdateDto.getAddress());
             if(researcherUpdateDto.getPassword() != null) researcher.setPassword(SecurityUtil.hashPassword(researcherUpdateDto.getPassword()));

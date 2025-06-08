@@ -1,6 +1,7 @@
 package org.researchbucks.util;
 
 import org.researchbucks.dto.EmailParamDto;
+import org.researchbucks.enums.Role;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ public class EmailCreateUtil {
 
 
     public static EmailParamDto createVerificationEmail(String username, String token){
-        String path = "/respondent/auth/verifyRespondent";
+        String path = "/signupPassword";
         String verificationUrl = generateUrl(path, token);
         Map<String, Object> properties = new HashMap<>();
         properties.put(CommonMessages.USERNAME, username);
@@ -25,7 +26,7 @@ public class EmailCreateUtil {
     }
 
     public static EmailParamDto createResetPasswordEmail(String username, String token){
-        String path = "/respondent/auth/resetPassword";
+        String path = "/resetPassword";
         String resetUrl = generateUrl(path, token);
         Map<String, Object> properties = new HashMap<>();
         properties.put(CommonMessages.USERNAME, username);
@@ -39,9 +40,10 @@ public class EmailCreateUtil {
     }
 
     private static String generateUrl(String path, String token){
-        return UriComponentsBuilder.fromUriString("http://localhost:8080")
+        return UriComponentsBuilder.fromUriString("http://20.121.120.231:80")
                 .path(path)
                 .queryParam("token", token)
+                .queryParam("role", Role.ROLE_RESPONDENT)
                 .build()
                 .toUriString();
     }

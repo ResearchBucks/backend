@@ -119,6 +119,8 @@ public class UserServiceImpl implements UserService {
             log.info(CommonMessages.GET_RESPONDENT);
             Respondent respondent = userRepository.findById(id).get();
             if(respondent.getIsDeleted()) throw new Exception(CommonMessages.INVALID_RESPONDENT);
+            if(respondentUpdateDto.getFirstName() != null) respondent.setFirstName(respondentUpdateDto.getFirstName());
+            if(respondentUpdateDto.getLastName() != null) respondent.setLastName(respondentUpdateDto.getLastName());
             if(respondentUpdateDto.getMobile() != null) respondent.setMobile(respondentUpdateDto.getMobile());
             if(respondentUpdateDto.getAddress() != null) respondent.setAddress(respondentUpdateDto.getAddress());
             if(respondentUpdateDto.getPassword() != null) respondent.setPassword(SecurityUtil.hashPassword(respondentUpdateDto.getPassword()));

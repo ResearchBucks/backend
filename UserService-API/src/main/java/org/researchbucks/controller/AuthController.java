@@ -107,14 +107,15 @@ public class AuthController {
      Return type: ResponseEntity
      ************************/
     @PostMapping("/verifyRespondent")
-    public ResponseEntity<ResponseDto> verifyRespondent(@RequestParam("token") String token){
+    public ResponseEntity<ResponseDto> verifyRespondent(@RequestBody PasswordResetDto passwordResetDto){
         try{
-            if(!jwtUtil.validateJwtToken(token)) throw new Exception(CommonMessages.INVALID_JWT);
+            if(!jwtUtil.validateJwtToken(passwordResetDto.getToken())) throw new Exception(CommonMessages.INVALID_JWT);
             log.info(CommonMessages.GET_RESPONDENT);
-            Respondent respondent = userRepository.findByEmail(jwtUtil.getUserNameFromJwtToken(token));
+            Respondent respondent = userRepository.findByEmail(jwtUtil.getUserNameFromJwtToken(passwordResetDto.getToken()));
             if(respondent.getIsDeleted() || respondent.getIsVerified() || respondent.getVerificationToken() == null) throw new Exception(CommonMessages.INVALID_RESPONDENT);
-            if(!respondent.getVerificationToken().equals(SecurityUtil.hashToken(token))) throw new Exception(CommonMessages.INVALID_JWT);
+            if(!respondent.getVerificationToken().equals(SecurityUtil.hashToken(passwordResetDto.getToken()))) throw new Exception(CommonMessages.INVALID_JWT);
             respondent.setIsVerified(true);
+            respondent.setPassword(SecurityUtil.hashPassword(passwordResetDto.getPassword()));
             respondent.setVerificationToken(null);
             userRepository.save(respondent);
             log.info(CommonMessages.VERIFIED);

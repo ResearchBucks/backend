@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RespondentUpdateDto {
 
+    private String firstName;
+    private String lastName;
     private String mobile;
     private String address;
     private String password;

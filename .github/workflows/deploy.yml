@@ -1,0 +1,47 @@
+name: Deploy to Azure VM (Dev)
+
+on:
+  push:
+    branches:
+      - dev
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AZURE_VM_IP }}
+          username: azureuser
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/azureuser/backend
+
+            echo "Pulling latest code..."
+            git pull origin dev
+            git checkout dev
+
+            echo "Building all Java services..."
+            for d in Service-Registry API-Gateway AdminService-API ResearcherService-API UserService-API; do
+              echo "Building $d..."
+              cd $d
+              mvn -B -ntp clean package -DskipTests
+              cd ..
+            done
+
+            echo "Stopping existing containers..."
+            docker-compose down
+
+            echo "Building and starting new containers..."
+            docker-compose up --build -d
+
+            echo "Cleaning up old images..."
+            docker image prune -f

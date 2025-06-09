@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/respondent/**
+        - id: researcher-service
+          uri: lb://researcher-service
+          predicates:
+            - Path=/researcher/**
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+#            allowedOrigins: "http://${ui-client.hostname}:${ui-client.port}"
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+#            allowCredentials: true
+            allowCredentials: false
+
+server:
+  port: 8060
+
+#Eureka configurations
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+#frontend configurations
+ui-client:
+  hostname: localhost
+  port: 3000
